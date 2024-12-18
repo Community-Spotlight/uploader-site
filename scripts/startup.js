@@ -1,8 +1,5 @@
 /* Main Variables */
-
-let uploadData = {
-  name: "", url: "", tags: [], media: {}, optID: ""
-};
+let uploadData = { name: "", url: "", tags: [], media: {}, optID: "" };
 
 let showAllTags = false;
 
@@ -45,12 +42,12 @@ function setupBtnFncs() {
     e.stopPropagation();
   });
 
-  const mediaBar = document.querySelector(`div[class="media-ctrl"]`);
+  // TODO Clone this element and duplicate it around
+  const mediaBar = document.querySelectorAll(`div[class="media-ctrl"]`);
   mediaBar[0].addEventListener("click", (e) => {
     
     e.stopPropagation();
   });
-
   mediaBar[3].addEventListener("click", (e) => {
 
     e.stopPropagation();
