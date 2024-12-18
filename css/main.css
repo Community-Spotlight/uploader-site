@@ -73,6 +73,10 @@ input {
   text-align: center;
   font-size: 13px;
 }
+input:invalid:focus {
+  color: pink;
+  border: solid 3px red;
+}
 
 .tag-div {
   display: flex;
