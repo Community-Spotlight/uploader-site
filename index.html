@@ -1,10 +1,8 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Community Spotlight Uploader</title>
     <base href="https://raw.githubusercontent.com/Community-Spotlight/uploader-site/refs/heads/main/">
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta content="Community Spotlight Uploader" property="og:title">
     <meta content="Upload Promotional Media for Community Spotlight, Free of Charge!" property="og:description">
@@ -13,128 +11,129 @@
     <meta content="#00ff84" data-react-helmet="true" name="theme-color">
     <link rel="icon" href="assets/CS-upload.svg">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Community-Spotlight/uploader-site/css/main.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tilt+Warp">
   </head>
   <body style="background-color: #1f1f1f">
     <div class="headerNav">
-        <div class="innerNav">
-          <img class="toGit" draggable="false" src="assets/CS-logo.svg" onclick="window.open('https://github.com/Community-Spotlight')">
-          <div class="navTitle">Community Spotlight Promotion Uploader</div>
-        </div>
+      <div class="innerNav">
+        <img class="toGit" draggable="false" src="assets/CS-logo.svg" onclick="window.open('https://github.com/Community-Spotlight')">
+        <div class="navTitle">Community Spotlight Promotion Uploader</div>
+      </div>
     </div>
-    <div class="promo-uploader">
-      <div class="section-upload" id="meta">
-        <span>Name of Product</span>
-        <input type="text" id="name" required>
-        <span>URL to Product</span>
-        <input type="url" id="url" placeholder="https://example.com" pattern="https://.*" required>
-      </div>
-      <div class="section-upload" id="tags">
-        <span>Related Tags</span>
-        <div class="tag-div">
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Gaming</span>
+    <form>
+      <div class="promo-uploader">
+        <div class="section-upload" id="meta">
+          <span>Name of Product</span>
+          <input type="text" id="name" required="">
+          <span>URL to Product</span>
+          <input type="url" id="url" placeholder="https://example.com" pattern="https://.*" required="">
+        </div>
+        <div class="section-upload" id="tags">
+          <span>Related Tags</span>
+          <div class="tag-div">
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Gaming</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Art</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Music</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Sports</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Technology</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Fashion</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Food &amp; Beverage</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Entertainment</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Health</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Education</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Science &amp; Nature</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Finance</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Automotive</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Lifestyle</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Animals</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Photography</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Dark Mode</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Light Mode</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Quiet</span>
+            </div>
+            <div class="promo-tag">
+              <input type="checkbox">
+              <span>Loud</span>
+            </div>
           </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Art</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Music</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Sports</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Technology</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Fashion</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Food & Beverage</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Entertainment</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Health</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Education</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Science & Nature</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Finance</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Automotive</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Lifestyle</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Animals</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Photography</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Dark Mode</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Light Mode</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Quiet</span>
-          </div>
-          <div class="promo-tag">
-            <input type="checkbox">
-            <span>Loud</span>
+          <i class="hover-desc">...See More</i>
+        </div>
+        <div class="section-upload" id="media">
+          <span>Promotional Media</span>
+          <i class="hover-desc">See Guidelines</i>
+          <div class="media-ctrl">
+            <img class="media-btn" id="minus" src="assets/minus.svg" draggable="false">
+            <label for="file-input" class="media-file">Upload Media</label>
+            <input type="file" id="file-input">
+            <img class="media-btn" id="plus" src="assets/plus.svg" draggable="false">
           </div>
         </div>
-        <i class="hover-desc">...See More</i>
-      </div>
-      <div class="section-upload" id="media">
-        <span>Promotional Media</span>
-        <i class="hover-desc">See Guidelines</i>
-        <div class="media-ctrl">
-          <img class="media-btn" id="minus" src="assets/minus.svg" draggable="false">
-          <label for="file-input" class="media-file">Upload Media</label>
-          <input type="file" id="file-input">
-          <img class="media-btn" id="plus" src="assets/plus.svg" draggable="false">
+        <div class="section-upload" id="optNotif">
+          <span>(Optional) Discord User ID</span>
+          <i class="desc">If submitted, you will receive a ping from our server if your Promotion was Accepted/Rejected</i>
+          <input type="number" min="10000000000000000" max="999999999999999999">
         </div>
+        <input type="submit" class="submit" value="Upload Promotion">
       </div>
-      <div class="section-upload" id="optNotif">
-        <span>(Optional) Discord User ID</span>
-        <i class="desc">If submitted, you will receive a ping from our server if your Promotion was Accepted/Rejected</i>
-        <input type="number" min="10000000000000000" max="999999999999999999">
-      </div>
-      <input type="button" class="submit" value="Upload Promotion">
-    </div>
+    </form>
     <script src="scripts/startup.js"></script>
   </body>
 </html>
