@@ -56,6 +56,7 @@ body {
   margin: 5px;
 }
 .section-upload .hover-desc:hover {
+  user-select: none;
   color: #00c9ff;
   font-size: 13px;
   margin: 5px;
