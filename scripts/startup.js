@@ -42,16 +42,11 @@ function setupBtnFncs() {
     e.stopPropagation();
   });
 
-  const mediaBar = document.querySelector(`div[class="media-ctrl"]`);
-  const mediaBtns = mediaBar.children;
-  mediaBtns[0].addEventListener("click", (e) => {
-    e.target.parentNode.remove();
-    e.stopPropagation();
-  });
-  mediaBtns[3].addEventListener("click", (e) => {
-    mediaBar.insertAdjacentElement("afterend", mediaBar.cloneNode(true));
-    e.stopPropagation();
-  });
+  const sampleMediaBar = document.querySelector(`div[class="media-ctrl"]`);
+  const mediaBar = sampleMediaBar.cloneNode(true);
+  sampleMediaBar.style.display = "none";
+  sampleMediaBar.insertAdjacentElement("afterend", mediaBar);
+  mediaBarSetup(mediaBar);
 
   // Opt Ping Input
   const optPing = document.querySelector(`input[id="pingID"]`);
@@ -72,7 +67,33 @@ function showMediaRules() {
   
 }
 
+function showMediaEditor() {
+  
+}
+
 /* Internal Utils */
+function mediaBarSetup(bar) {
+  const mediaBtns = bar.children;
+  mediaBtns[0].addEventListener("click", (e) => {
+    // TODO reset media
+    if (mediaBtns[0].parentNode.previousElementSibling.tagName !== "I") e.target.parentNode.remove();
+    e.stopPropagation();
+  });
+  mediaBtns[2].addEventListener("change", (e) => {
+    console.log(e);
+    e.stopPropagation();
+  });
+  mediaBtns[3].addEventListener("click", (e) => {
+    const newBar = bar.cloneNode(true);
+    mediaBarSetup(newBar);
+    bar.insertAdjacentElement("afterend", newBar);
+    e.stopPropagation();
+  });
+}
+
+function mediaHandler() {
+  
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   setupBtnFncs();
