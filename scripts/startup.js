@@ -73,29 +73,62 @@ function showMediaEditor() {
 
 /* Internal Utils */
 function mediaBarSetup(bar) {
+  bar.style.display = ""; // We use the empty sample element
   const mediaBtns = bar.children;
   mediaBtns[0].addEventListener("click", (e) => {
-    // TODO reset media
+    delete uploadData.media[mediaBtns[1].textContent];
     const parent = e.target.parentNode;
     if (parent.previousElementSibling.previousElementSibling.tagName !== "I") parent.remove();
+    else mediaBtns[1].textContent = "Upload Media";
     e.stopPropagation();
   });
   mediaBtns[3].addEventListener("click", (e) => {
-    const newBar = bar.cloneNode(true);
+    const newBar = document.querySelector(`div[class="media-ctrl"]`).cloneNode(true);
     mediaBarSetup(newBar);
     bar.insertAdjacentElement("afterend", newBar);
     e.stopPropagation();
   });
 
   const fileBtn = bar.querySelector(`input[id="file-input"]`);
-  bar.querySelector(`div[class="media-file"]`).addEventListener("click", () => fileBtn.click());
+  const fileLabel = bar.querySelector(`div[class="media-file"]`);
+  fileLabel.addEventListener("click", () => fileBtn.click());
   fileBtn.addEventListener("change", (e) => {
-    console.log(e);
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        fileLabel.textContent = file.name;
+        mediaHandler(reader.result, file);
+      };
+      reader.onerror = (err) => { console.warn(err) };
+    }
   });
 }
 
-function mediaHandler() {
-  
+function mediaHandler(dataURL, file) {
+  const type = toFixedType(file.type);
+  if (file.size > 10000000) {
+    alert("File Size Exceeds the 10MB Limit!");
+    return;
+  }
+  if (type === undefined) {
+    alert("Unsupported File Type! Please Read the Guidelines");
+    return;
+  }
+  uploadData.media[file.name] = { d: dataURL, t: type }
+}
+
+function toFixedType(fileType) {
+  switch (fileType) {
+    case "image/svg+xml": return "svg";
+    case "image/png": return "png";
+    case "image/jpg":
+    case "image/jpeg": return "jpeg";
+    case "video/mp4": return "mp4";
+    // TODO add HTML later
+    default: return undefined;
+  }  
 }
 
 document.addEventListener("DOMContentLoaded", () => {
