@@ -80,18 +80,15 @@ function mediaBarSetup(bar) {
     if (parent.previousElementSibling.previousElementSibling.tagName !== "I") parent.remove();
     e.stopPropagation();
   });
-  mediaBtns[1].addEventListener("change", (e) => {
-    console.log(e);
-    e.stopPropagation();
-  });
-  mediaBtns[2].addEventListener("change", (e) => {
-    console.log(e);
-    e.stopPropagation();
-  });
   mediaBtns[3].addEventListener("click", (e) => {
     const newBar = bar.cloneNode(true);
     mediaBarSetup(newBar);
     bar.insertAdjacentElement("afterend", newBar);
+    e.stopPropagation();
+  });
+
+  bar.querySelector(`input[id="file-input"]`).addEventListener("change", (e) => {
+    console.log(e);
     e.stopPropagation();
   });
 }
