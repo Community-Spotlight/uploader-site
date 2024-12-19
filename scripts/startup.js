@@ -77,8 +77,11 @@ function mediaBarSetup(bar) {
   mediaBtns[0].addEventListener("click", (e) => {
     // TODO reset media
     const parent = e.target.parentNode;
-    console.log(parent.previousElementSibling.tagName);
-    if (parent.previousElementSibling.tagName !== "I") parent.remove();
+    if (parent.previousElementSibling.previousElementSibling.tagName !== "I") parent.remove();
+    e.stopPropagation();
+  });
+  mediaBtns[1].addEventListener("change", (e) => {
+    console.log(e);
     e.stopPropagation();
   });
   mediaBtns[2].addEventListener("change", (e) => {
