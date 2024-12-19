@@ -94,6 +94,7 @@ input:invalid:focus {
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
   user-select: none;
+  cursor: pointer;
 }
 .promo-tag input {
   position: relative;
@@ -101,7 +102,6 @@ input:invalid:focus {
   top: -3px;
   margin-right: 5px;
   transform: scale(1.2);
-  cursor: pointer;
   accent-color: #00ff62;
   background-color: #00c9ff;
 }
