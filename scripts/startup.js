@@ -87,9 +87,10 @@ function mediaBarSetup(bar) {
     e.stopPropagation();
   });
 
-  bar.querySelector(`input[id="file-input"]`).addEventListener("change", (e) => {
+  const fileBtn = bar.querySelector(`input[id="file-input"]`);
+  bar.querySelector(`div[class="media-file"]`).addEventListener("click", () => fileBtn.click());
+  fileBtn.addEventListener("change", (e) => {
     console.log(e);
-    e.stopPropagation();
   });
 }
 
