@@ -110,23 +110,25 @@ function mediaBarSetup(bar) {
   fileBtn.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
+      const type = toFixedType(file.type);
+      if (type === undefined) {
+        e.target.value = "";
+        return alert("Unsupported File Type! Please Read the Guidelines");
+      }
+      if (file.size > 10000000) {
+        e.target.value = "";
+        return alert("File Size Exceeds the 10MB Limit!");
+      }
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
         fileLabel.textContent = file.name;
-        mediaHandler(reader.result, file);
+        uploadData.media[file.name] = { t: type, d: reader.result };
+        showMediaEditor(file.name, type);
       };
       reader.onerror = (err) => { console.warn(err) };
     }
   });
-}
-
-function mediaHandler(dataURL, file) {
-  const type = toFixedType(file.type);
-  if (file.size > 10000000) return alert("File Size Exceeds the 10MB Limit!");
-  if (type === undefined) return alert("Unsupported File Type! Please Read the Guidelines");
-  uploadData.media[file.name] = { d: dataURL, t: type };
-  showMediaEditor(file.name, type);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
