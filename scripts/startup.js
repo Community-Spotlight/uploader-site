@@ -63,6 +63,10 @@ function refreshTagList() {
   else hoverTxt.textContent = "...See More";
 }
 
+function showLoadingGUI() {
+  
+}
+
 function showMediaRules() {
   
 }
@@ -131,6 +135,14 @@ function mediaBarSetup(bar) {
   });
 }
 
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (e.target.checkValidity()) {
+    console.log("Submitting Data...");
+    showLoadingGUI();
+    // TODO add to spreadsheet, add GUI
+  }
+});
 document.addEventListener("DOMContentLoaded", () => {
   setupBtnFncs();
   refreshTagList();
