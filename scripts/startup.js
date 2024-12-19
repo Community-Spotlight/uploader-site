@@ -49,7 +49,7 @@ function setupBtnFncs() {
     e.stopPropagation();
   });
   mediaBar[3].addEventListener("click", (e) => {
-    mediaBar.insertAdjacentElement("afterend", mediaBar.cloneNode(true));
+    mediaBar.insertAdjacentElement("afterend", e.target.parentNode.cloneNode(true));
     e.stopPropagation();
   });
 
