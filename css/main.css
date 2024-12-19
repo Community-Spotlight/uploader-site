@@ -141,7 +141,12 @@ input:invalid:focus {
   color: #00ff84;
 }
 input[type="file"] {
-  display: none;
+  position: absolute;
+  display: inline;
+  width: 1px;
+  height: 1px;
+  z-index: -1;
+  opacity: 0;
 }
 
 .submit {
