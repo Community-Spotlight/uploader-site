@@ -76,7 +76,9 @@ function mediaBarSetup(bar) {
   const mediaBtns = bar.children;
   mediaBtns[0].addEventListener("click", (e) => {
     // TODO reset media
-    if (mediaBtns[0].parentNode.previousElementSibling.tagName !== "I") e.target.parentNode.remove();
+    const parent = e.target.parentNode;
+    console.log(parent.previousElementSibling.tagName);
+    if (parent.previousElementSibling.tagName !== "I") parent.remove();
     e.stopPropagation();
   });
   mediaBtns[2].addEventListener("change", (e) => {
