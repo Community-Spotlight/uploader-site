@@ -86,9 +86,6 @@ function toFixedType(fileType) {
 
 function mediaBarSetup(bar) {
   bar.style.display = ""; // We use the empty sample element
-  bar.setAttribute("required", "true");
-  bar.setAttribute("name", "media");
-
   const mediaBtns = bar.children;
   mediaBtns[0].addEventListener("click", (e) => {
     delete uploadData.media[mediaBtns[1].textContent];
@@ -104,9 +101,12 @@ function mediaBarSetup(bar) {
     e.stopPropagation();
   });
 
-  const fileBtn = bar.querySelector(`input[id="file-input"]`);
   const fileLabel = bar.querySelector(`div[class="media-file"]`);
   fileLabel.addEventListener("click", () => fileBtn.click());
+
+  const fileBtn = bar.querySelector(`input[id="file-input"]`);
+  fileBtn.setAttribute("required", "true");
+  fileBtn.setAttribute("name", "media");
   fileBtn.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
