@@ -45,11 +45,11 @@ function setupBtnFncs() {
   // TODO Clone this element and duplicate it around
   const mediaBar = document.querySelector(`div[class="media-ctrl"]`).children;
   mediaBar[0].addEventListener("click", (e) => {
-    
+    e.target.parentNode.remove();
     e.stopPropagation();
   });
   mediaBar[3].addEventListener("click", (e) => {
-
+    mediaBar.insertAdjacentElement("afterend", mediaBar.cloneNode(true));
     e.stopPropagation();
   });
 
