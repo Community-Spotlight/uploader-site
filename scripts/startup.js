@@ -43,7 +43,7 @@ function setupBtnFncs() {
   });
 
   // TODO Clone this element and duplicate it around
-  const mediaBar = document.querySelectorAll(`div[class="media-ctrl"]`);
+  const mediaBar = document.querySelector(`div[class="media-ctrl"]`).children;
   mediaBar[0].addEventListener("click", (e) => {
     
     e.stopPropagation();
