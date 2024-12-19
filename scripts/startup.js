@@ -67,13 +67,28 @@ function showMediaRules() {
   
 }
 
-function showMediaEditor() {
+function showMediaEditor(namespace, fileType) {
   
 }
 
 /* Internal Utils */
+function toFixedType(fileType) {
+  switch (fileType) {
+    case "image/svg+xml": return "svg";
+    case "image/png": return "png";
+    case "image/jpg":
+    case "image/jpeg": return "jpeg";
+    case "video/mp4": return "mp4";
+    // TODO add HTML later
+    default: return undefined;
+  }  
+}
+
 function mediaBarSetup(bar) {
   bar.style.display = ""; // We use the empty sample element
+  bar.setAttribute("required", "true");
+  bar.setAttribute("name", "media");
+
   const mediaBtns = bar.children;
   mediaBtns[0].addEventListener("click", (e) => {
     delete uploadData.media[mediaBtns[1].textContent];
@@ -108,27 +123,10 @@ function mediaBarSetup(bar) {
 
 function mediaHandler(dataURL, file) {
   const type = toFixedType(file.type);
-  if (file.size > 10000000) {
-    alert("File Size Exceeds the 10MB Limit!");
-    return;
-  }
-  if (type === undefined) {
-    alert("Unsupported File Type! Please Read the Guidelines");
-    return;
-  }
-  uploadData.media[file.name] = { d: dataURL, t: type }
-}
-
-function toFixedType(fileType) {
-  switch (fileType) {
-    case "image/svg+xml": return "svg";
-    case "image/png": return "png";
-    case "image/jpg":
-    case "image/jpeg": return "jpeg";
-    case "video/mp4": return "mp4";
-    // TODO add HTML later
-    default: return undefined;
-  }  
+  if (file.size > 10000000) return alert("File Size Exceeds the 10MB Limit!");
+  if (type === undefined) return alert("Unsupported File Type! Please Read the Guidelines");
+  uploadData.media[file.name] = { d: dataURL, t: type };
+  showMediaEditor(file.name, type);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
