@@ -177,7 +177,7 @@ function mediaBarSetup(bar) {
     e.stopPropagation();
   });
   mediaBtns[3].addEventListener("click", (e) => {
-    if (openMediaBtns > 3) return alert("You can only Upload 3 Promotions at a Time")
+    if (openMediaBtns > 2) return alert("You can only Upload 3 Promotions at a Time")
     const newBar = document.querySelector(`div[class="media-ctrl"]`).cloneNode(true);
     mediaBarSetup(newBar);
     openMediaBtns++;
