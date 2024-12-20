@@ -64,7 +64,20 @@ function refreshTagList() {
 }
 
 function showLoadingGUI() {
+  const css = document.createElement("link");
+  css.setAttribute("rel", "stylesheet");
+  css.setAttribute("href", "css/loader.css");
+  document.head.appendChild(css);
   
+  const holder = document.createElement("div");
+  holder.classList.add("overlay");
+  const loadCirc = document.createElement("div");
+  loadCirc.classList.add("load-circle");
+  loadCirc.innerHTML = `<img width="200" src="assets/loader.svg" draggable="false">`;
+
+  holder.appendChild(loadCirc);
+  document.body.appendChild(holder);
+  return holder;
 }
 
 function showMediaRules() {
@@ -125,7 +138,69 @@ function showMediaRules() {
 }
 
 function showMediaEditor(namespace, fileType) {
+  const media = uploadData.media[namespace];
   
+  const css = document.createElement("link");
+  css.setAttribute("rel", "stylesheet");
+  css.setAttribute("href", "css/media-editor.css");
+  document.head.appendChild(css);
+  
+  const holder = document.createElement("div");
+  holder.classList.add("overlay");
+  const editor = document.createElement("div");
+  editor.classList.add("editor");
+  editor.innerHTML = `
+    <div class="header">Promotion Media Editor</div>
+    <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
+    <div class="media-holder">
+      ${ fileType === "mp4" ? 
+        `<video class="video-media" src="${media.d}"></video>` : `<canvas class="image-media">`
+      }
+    </div>
+    <div class="title">Aspect Ratio</div>
+    <div class="selector-ui">
+      <select>
+        ${ fileType === "mp4" ? `
+          <option value="1">1:1</option>
+          <option value="2">4:3</option>
+          <option value="3">4:5</option>
+          <option value="4">16:9</option>
+          <option value="5">9:16</option>
+        ` : `
+          <option value="[250,250]">250x250</option>
+          <option value="[300,250]">300x250</option>
+          <option value="[480,270]">480x270</option>
+          <option value="[300,50]">300x50</option>
+          <option value="[50,300]">50x300</option>
+          <option value="[360,120]">360x120</option>
+          <option value="[120,360]">120x360</option>
+        `
+        }
+      </select>
+    </div>
+    <div class="title">Important Checks</div>
+    <div class="box"><img width="20" src="assets/bad.svg" draggable="false"></div>
+    <span class="title">selected size</span>
+    <div class="box"><img width="20" src="assets/bad.svg" draggable="false"></div>
+    <span class="title">video length</span>
+  `;
+
+  editor.querySelector(`div[class="exit-btn"]`).addEventListener("click", (e) => {
+    const anim = editor.animate(
+      [{ transform: "translate(-50%, -50%) scale(1)" }, { transform: "translate(-50%, -50%) scale(0)" }], { duration: 250, easing: "ease-in" }
+    );
+    anim.onfinish = () => {
+      css.remove();
+      holder.remove();
+    };
+    e.stopPropagation();
+  });
+
+  holder.appendChild(editor);
+  document.body.appendChild(holder);
+  editor.animate(
+    [{ transform: "translate(-50%, -50%) scale(0)" }, { transform: "translate(-50%, -50%) scale(1)" }], { duration: 300, easing: "ease-in-out" }
+  );
 }
 
 /* Internal Utils */
@@ -219,9 +294,9 @@ document.querySelector("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (e.target.checkValidity()) {
     console.log("Submitting Data...");
-    showLoadingGUI();
+    const loadScreen = showLoadingGUI();
     const urlData = constructPost();
-    // TODO finish this
+    // TODO send post, then end loadScreen, prevent submit button from working again
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
