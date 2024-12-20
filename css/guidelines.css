@@ -34,10 +34,10 @@
 .desc {
   font-family: Arial, Sans-Serif, Helvetica;
   font-size: 15px;
-  align-items: left;
+  align-items: center;
   align-text: left;
-  justify-content: left;
-  justify-items: left;
+  justify-content: center;
+  justify-items: center;
   width: 90%;
   padding: 0 25px 0 25px;
 }
