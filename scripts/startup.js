@@ -98,6 +98,7 @@ function showMediaRules() {
       <ul class="list">
         <li>All Files must be 10MB or Under</li>
         <li>Promotions must be Appropriate</li>
+        <li>Promotions will be Active for Approximately 2 Weeks after being Approved by a Team Member</li>
       </ul>
     </div>
     <div class="title">-= Rules for Image Promotions =-</div>
