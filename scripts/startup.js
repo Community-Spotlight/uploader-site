@@ -154,12 +154,13 @@ function showMediaEditor(namespace, fileType) {
     <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
     <div class="media-holder">
       ${ fileType === "mp4" ? 
-        `<video class="video-media" src="${media.d}"></video>` : `<canvas class="image-media">`
+        `<video class="video-media" src="${media.d}"></video>` : `<canvas class="image-media"></canvas>`
       }
     </div>
     <div class="title">Aspect Ratio</div>
     <div class="selector-ui">
       <select>
+        <option value="" selected disabled hidden>Choose Scale</option>
         ${ fileType === "mp4" ? `
           <option value="1">1:1</option>
           <option value="2">4:3</option>
@@ -179,10 +180,17 @@ function showMediaEditor(namespace, fileType) {
       </select>
     </div>
     <div class="title">Important Checks</div>
-    <div class="box"><img width="20" src="assets/bad.svg" draggable="false"></div>
-    <span class="title">selected size</span>
-    <div class="box"><img width="20" src="assets/bad.svg" draggable="false"></div>
-    <span class="title">video length</span>
+    <div class="box">
+      <img width="20" src="assets/bad.svg" draggable="false">
+      <img width="20" src="assets/good.svg" draggable="false">
+      <span class="check-desc">Aspect Ratio Selected</span>
+    </div>
+    ${ fileType === "mp4" ? `<div class="box">
+      <img width="20" src="assets/bad.svg" draggable="false">
+      <img width="20" src="assets/good.svg" draggable="false">
+      <span class="check-desc">Video Length in Range</span>
+    </div>` : ""
+    }
   `;
 
   editor.querySelector(`div[class="exit-btn"]`).addEventListener("click", (e) => {
