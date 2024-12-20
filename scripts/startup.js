@@ -103,18 +103,25 @@ function showMediaRules() {
       </ul>
     </div>
     <div class="title">-= Rules for HTML Promotions =-</div>
-    <div class="desc">...Coming Soon</div>
+    <div class="list">...Coming Soon</div>
   `;
 
   inner.querySelector(`div[class="exit-btn"]`).addEventListener("click", (e) => {
-    css.remove();
-    holder.remove();
+    const anim = inner.animate(
+      [{ transform: "translate(-50%, -50%) scale(1)" }, { transform: "translate(-50%, -50%) scale(0)" }], { duration: 250, easing: "ease-in" }
+    );
+    anim.onfinish = () => {
+      css.remove();
+      holder.remove();
+    };
     e.stopPropagation();
   });
 
   holder.appendChild(inner);
   document.body.appendChild(holder);
-  // TODO animations
+  inner.animate(
+    [{ transform: "translate(-50%, -50%) scale(0)" }, { transform: "translate(-50%, -50%) scale(1)" }], { duration: 300, easing: "ease-in-out" }
+  );
 }
 
 function showMediaEditor(namespace, fileType) {
@@ -129,13 +136,13 @@ function toFixedType(fileType) {
     case "image/jpg":
     case "image/jpeg": return "jpeg";
     case "video/mp4": return "mp4";
-    // TODO add HTML later
+    // TODO add HTML when implemented
     default: return undefined;
   }  
 }
 
 function mediaBarSetup(bar) {
-  bar.style.display = ""; // We use the empty sample element
+  bar.style.display = ""; // we always use the empty sample element
   const mediaBtns = bar.children;
   mediaBtns[0].addEventListener("click", (e) => {
     delete uploadData.media[mediaBtns[1].textContent];
@@ -186,7 +193,7 @@ document.querySelector("form").addEventListener("submit", (e) => {
   if (e.target.checkValidity()) {
     console.log("Submitting Data...");
     showLoadingGUI();
-    // TODO add to spreadsheet, add GUI
+    // TODO add to spreadsheet
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
