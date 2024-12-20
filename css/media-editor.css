@@ -32,6 +32,11 @@
   font-family: Tilt Warp;
   font-size: 18px;
 }
+.check-desc {
+  font-family: Arial, Sans-Serif, Helvetica;
+  font-size: 17px;
+  margin-left: 10px;
+}
 
 .media-holder {
   width: 100%;
@@ -75,6 +80,10 @@
   border: solid grey 1.5px;
   border-radius: 10px;
   background-color: #171717;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
 }
 
 .exit-btn {
