@@ -79,7 +79,7 @@ function showMediaRules() {
   inner.classList.add("guideline-inner");
   inner.innerHTML = `
     <u class="header">Promotion Media Guidelines</u>
-    <div class="exit-btn"><img width="20" src="assets/exit.svg"></div>
+    <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
     <div class="title">-= General Rules =-</div>
     <div class="desc">
       <ul class="list">
