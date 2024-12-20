@@ -81,21 +81,21 @@ function showMediaRules() {
     <u class="header">Promotion Media Guidelines</u>
     <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
     <div class="title">-= General Rules =-</div>
-    <div class="desc">
+    <div class="gdesc">
       <ul class="list">
         <li>All Files must be 10MB or Under</li>
         <li>Promotions must be Appropriate</li>
       </ul>
     </div>
     <div class="title">-= Rules for Image Promotions =-</div>
-    <div class="desc">
+    <div class="gdesc">
       <ul class="list">
         <li>Accepted Image Formats: PNG, JPG, JPEG, SVG</li>
         <li>Acceptable Aspect Ratios: 250x250, 300x250, 480x270, 300x50, 50x300, 360x120, 120x360
       </ul>
     </div>
     <div class="title">-= Rules for Video Promotions =-</div>
-    <div class="desc">
+    <div class="gdesc">
       <ul class="list">
         <li>Accepted Video Formats: MP4</li>
         <li>Acceptable Aspect Ratios: 1:1, 4:3, 4:5, 16:9, 9:16</li>
