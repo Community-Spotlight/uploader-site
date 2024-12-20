@@ -43,6 +43,10 @@
 }
 .list {
   margin-top: 2px;
+  padding: 8px 20px 8px 20px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  background-color: #171717;
 }
 
 .exit-btn {
