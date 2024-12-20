@@ -1,7 +1,7 @@
 /* Main Variables */
 let uploadData = { name: "", url: "", tags: [], media: {}, optID: "" };
 
-let showAllTags = false;
+let showAllTags = false, openMediaBtns = 1;
 
 /* Setup */
 function setupBtnFncs() {
@@ -141,19 +141,46 @@ function toFixedType(fileType) {
   }  
 }
 
+function generateID() {
+  const soup = "!?@#%*+-~_=,.:;[]{}()^/|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const id = [];
+  for (let i = 0; i < 15; i++) { id[i] = soup.charAt(Math.random() * soup.length) }
+  return id.join("");
+}
+
+function generateDate() {
+  const d = new Date();
+  const hr = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${hr}:${min}`;
+}
+
+function constructPost() {
+  let url = "https://...";
+  url += `&upload-id=${encodeURIComponent(generateID())}&date=${encodeURIComponent(generateDate())}`;
+  url += `&product-name=${encodeURIComponent(uploadData.name)}&product-name=${encodeURIComponent(uploadData.url)}`;
+  url += `&tags=${encodeURIComponent(JSON.stringify(uploadData.tags))}&media=${encodeURIComponent(JSON.stringify(uploadData.media))}`;
+  url += `&opt-ping-id=${uploadData.optID || "0"}`;
+  return url;
+}
+
 function mediaBarSetup(bar) {
   bar.style.display = ""; // we always use the empty sample element
   const mediaBtns = bar.children;
   mediaBtns[0].addEventListener("click", (e) => {
     delete uploadData.media[mediaBtns[1].textContent];
     const parent = e.target.parentNode;
-    if (parent.previousElementSibling.previousElementSibling.tagName !== "I") parent.remove();
-    else mediaBtns[1].textContent = "Upload Media";
+    if (parent.previousElementSibling.previousElementSibling.tagName !== "I") {
+      openMediaBtns--;
+      parent.remove();
+    } else mediaBtns[1].textContent = "Upload Media";
     e.stopPropagation();
   });
   mediaBtns[3].addEventListener("click", (e) => {
+    if (openMediaBtns > 3) return alert("You can only Upload 3 Promotions at a Time")
     const newBar = document.querySelector(`div[class="media-ctrl"]`).cloneNode(true);
     mediaBarSetup(newBar);
+    openMediaBtns++;
     bar.insertAdjacentElement("afterend", newBar);
     e.stopPropagation();
   });
@@ -188,12 +215,13 @@ function mediaBarSetup(bar) {
   });
 }
 
-document.querySelector("form").addEventListener("submit", (e) => {
+document.querySelector("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (e.target.checkValidity()) {
     console.log("Submitting Data...");
     showLoadingGUI();
-    // TODO add to spreadsheet
+    const urlData = constructPost();
+    // TODO finish this
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
