@@ -54,7 +54,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  left: 90%;
+  right: 2%;
   top: 2%;
   transition: transform 100ms ease-in-out, filter 100ms ease-in-out;
   transform: scale(1);
