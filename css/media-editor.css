@@ -26,24 +26,52 @@
 .header {
   font-family: Tilt Warp;
   font-size: 25px;
+  padding: 0 50px 0 50px;
 }
 .title {
   font-family: Tilt Warp;
-  font-size: 22px;
-}
-.gdesc {
-  font-family: Arial, Sans-Serif, Helvetica;
   font-size: 18px;
+}
+
+.media-holder {
+  width: 100%;
+  margin: 10px 20px 10px 20px;
+  padding: 10px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  background-color: #171717;
+  display:grid;
   align-items: center;
-  align-text: left;
   justify-content: center;
   justify-items: center;
-  width: 90%;
-  padding: 0 25px 0 25px;
 }
-.list {
-  margin-top: 3px;
-  padding: 8px 10px 8px 25px;
+.video-media {
+
+}
+.image-media {
+
+}
+
+.selector-ui {
+  width: 90%;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+.selector-ui select {
+  width: 100%;
+  margin: 10px 0 10px 0;
+  padding: 5px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  background-color: #171717;
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+}
+.box {
+  margin: 10px;
+  padding: 10px;
   border: solid grey 1.5px;
   border-radius: 10px;
   background-color: #171717;
