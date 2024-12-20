@@ -12,7 +12,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  animation: spin 1s linear infinite;
+  animation: spin 2s linear infinite;
 }
 @keyframes spin {
   from {
