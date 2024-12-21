@@ -1,7 +1,7 @@
 /* Main Variables */
 let uploadData = { name: "", url: "", tags: [], media: {}, optID: "" };
 
-let showAllTags = false, openMediaBtns = 1;
+let showAllTags = false, hasSubmitted = false, openMediaBtns = 1;
 
 /* Setup */
 function setupBtnFncs() {
@@ -343,7 +343,7 @@ function generateDate() {
 }
 
 function constructPost() {
-  let url = "https://...";
+  let url = "https://script.google.com/macros/s/AKfycbwb49wDXQjOBxtGfjg-bpyMXckewOntlqIyqZejA8MkEUu7I7juDctKLbMXrf6IBjUc-w/exec?gid=0";
   url += `&upload-id=${encodeURIComponent(generateID())}&date=${encodeURIComponent(generateDate())}`;
   url += `&product-name=${encodeURIComponent(uploadData.name)}&product-name=${encodeURIComponent(uploadData.url)}`;
   url += `&tags=${encodeURIComponent(JSON.stringify(uploadData.tags))}&media=${encodeURIComponent(JSON.stringify(Object.values(uploadData.media)))}`;
@@ -412,13 +412,21 @@ function compressSVG(svg) {
     .replace(/>\s+</g, "><").replace(/\s+$/g, "").trim();
 }
 
-document.querySelector("form").addEventListener("submit", async (e) => {
+document.querySelector("form").addEventListener("submit", (e) => {
   e.preventDefault();
-  if (e.target.checkValidity()) {
-    console.log("Submitting Data...");
+  if (e.target.checkValidity() && !hasSubmitted) {
+    document.querySelector(`input[class="submit"]`).style.filter = "brightness(0.4)";
+    hasSubmitted = true;
+
+    console.log("Submitting Promotion...");
     const loadScreen = showLoadingGUI();
     const urlData = constructPost();
-    // TODO send post, then end loadScreen, prevent submit button from working again
+    fetch(urlData)
+      .then((r) => {
+        loadScreen.remove();
+        console.log("Promotion Submitted!")
+      })
+      .catch((e) => { console.warn("Post Error", e) });
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
