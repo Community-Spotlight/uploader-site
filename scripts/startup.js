@@ -374,8 +374,7 @@ function mediaBarSetup(bar) {
 
   const fileLabel = bar.querySelector(`div[class="media-file"]`);
   fileLabel.addEventListener("click", () => {
-    fileLabel.style.borderColor = "";
-    fileLabel.style.color = "";
+    fileLabel.removeAttribute("style");
     fileBtn.click();
   });
 
