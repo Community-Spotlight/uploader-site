@@ -8,6 +8,7 @@
   background-color: rgba(0,0,0,0.4);
 }
 .editor {
+  max-width: 85%;
   padding: 25px;
   position: absolute;
   left: 50%;
