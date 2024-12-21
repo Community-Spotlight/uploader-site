@@ -139,8 +139,9 @@ function showMediaRules() {
 }
 
 function showMediaEditor(namespace, fileType) {
+  let canSubmit = false;
   const media = uploadData.media[namespace];
-  
+
   const css = document.createElement("link");
   css.setAttribute("rel", "stylesheet");
   css.setAttribute("href", "css/media-editor.css");
@@ -193,10 +194,22 @@ function showMediaEditor(namespace, fileType) {
       </div>
       `
     }
-    <button class="media-submit">Submit</button>
+    <button class="media-submit" style="background: linear-gradient(125deg, #ff3b3b, #bd0202); border: solid 3px #910000; -webkit-text-stroke: 1px #910000;">Cancel</button>
   `;
 
-  editor.querySelector(`button[class="media-submit"]`).addEventListener("click", (e) => {
+  const submitBtn = editor.querySelector(`button[class="media-submit"]`);
+  const testRequirements = () => {
+    if (
+      allCheckers[0].children[0].style.display === "none" &&
+      (fileType === "mp4" ? allCheckers[1].children[0].style.display === "none" : true)
+    ) {
+      canSubmit = true;
+      submitBtn.style = "";
+      submitBtn.textContent = "Submit";
+    }
+  };
+  submitBtn.addEventListener("click", (e) => {
+    if (!canSubmit) delete uploadData.media[namespace];
     const anim = editor.animate(
       [{ transform: "translate(-50%, -50%) scale(1)" }, { transform: "translate(-50%, -50%) scale(0)" }], { duration: 250, easing: "ease-in" }
     );
