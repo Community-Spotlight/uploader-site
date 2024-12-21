@@ -132,6 +132,7 @@ input:invalid:focus {
   border-radius: 10px;
   cursor: pointer;
   line-height: 100%;
+  white-space: nowrap;
   user-select: none;
   color: #d8d8d8;
   transition: transform 100ms ease-in-out, color 100ms ease-in-out, margin-left 100ms ease-in-out, margin-right 100ms ease-in-out;
