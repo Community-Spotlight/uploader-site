@@ -345,7 +345,7 @@ function generateDate() {
 function constructPost() {
   let url = "https://script.google.com/macros/s/AKfycbwb49wDXQjOBxtGfjg-bpyMXckewOntlqIyqZejA8MkEUu7I7juDctKLbMXrf6IBjUc-w/exec?gid=0";
   url += `&upload-id=${encodeURIComponent(generateID())}&date=${encodeURIComponent(generateDate())}`;
-  url += `&product-name=${encodeURIComponent(uploadData.name)}&product-name=${encodeURIComponent(uploadData.url)}`;
+  url += `&product-name=${encodeURIComponent(uploadData.name)}&product-url=${encodeURIComponent(uploadData.url)}`;
   url += `&tags=${encodeURIComponent(JSON.stringify(uploadData.tags))}&media=${encodeURIComponent(JSON.stringify(Object.values(uploadData.media)))}`;
   url += `&opt-ping-id=${uploadData.optID || "0"}`;
   return url;
@@ -376,8 +376,6 @@ function mediaBarSetup(bar) {
   fileLabel.addEventListener("click", () => fileBtn.click());
 
   const fileBtn = bar.querySelector(`input[id="file-input"]`);
-  fileBtn.setAttribute("required", "true");
-  fileBtn.setAttribute("name", "media");
   fileBtn.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -414,6 +412,10 @@ function compressSVG(svg) {
 
 document.querySelector("form").addEventListener("submit", (e) => {
   e.preventDefault();
+  if (Object.keys(uploadData.media).length === 0) {
+    document.querySelectorAll(`input[type="file"]`)[1].scrollIntoView({ behavior: "smooth", block: "center" });
+    return alert("You must Upload at least 1 Promotion to Submit");
+  }
   if (e.target.checkValidity() && !hasSubmitted) {
     document.querySelector(`input[class="submit"]`).style.filter = "brightness(0.4)";
     hasSubmitted = true;
@@ -423,10 +425,13 @@ document.querySelector("form").addEventListener("submit", (e) => {
     const urlData = constructPost();
     fetch(urlData)
       .then((r) => {
+        console.log("Promotion Submitted!");
         loadScreen.remove();
-        console.log("Promotion Submitted!")
       })
-      .catch((e) => { console.warn("Post Error", e) });
+      .catch((e) => {
+        console.warn("Submission Error", e);
+        loadScreen.remove();
+      });
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
