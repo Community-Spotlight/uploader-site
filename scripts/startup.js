@@ -152,7 +152,6 @@ function showMediaEditor(namespace, fileType) {
   editor.classList.add("editor");
   editor.innerHTML = `
     <div class="header">Promotion Media Editor</div>
-    <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
     <div class="media-holder">
       ${ fileType === "mp4" ? 
         `<video class="video-media" src="${media.d}" controls></video>` :
@@ -194,9 +193,10 @@ function showMediaEditor(namespace, fileType) {
       </div>
       `
     }
+    <button class="media-submit">Submit</button>
   `;
 
-  editor.querySelector(`div[class="exit-btn"]`).addEventListener("click", (e) => {
+  editor.querySelector(`button[class="media-submit"]`).addEventListener("click", (e) => {
     const anim = editor.animate(
       [{ transform: "translate(-50%, -50%) scale(1)" }, { transform: "translate(-50%, -50%) scale(0)" }], { duration: 250, easing: "ease-in" }
     );
@@ -330,7 +330,7 @@ function constructPost() {
   let url = "https://...";
   url += `&upload-id=${encodeURIComponent(generateID())}&date=${encodeURIComponent(generateDate())}`;
   url += `&product-name=${encodeURIComponent(uploadData.name)}&product-name=${encodeURIComponent(uploadData.url)}`;
-  url += `&tags=${encodeURIComponent(JSON.stringify(uploadData.tags))}&media=${encodeURIComponent(JSON.stringify(uploadData.media))}`;
+  url += `&tags=${encodeURIComponent(JSON.stringify(uploadData.tags))}&media=${encodeURIComponent(JSON.stringify(Object.values(uploadData.media)))}`;
   url += `&opt-ping-id=${uploadData.optID || "0"}`;
   return url;
 }
@@ -395,7 +395,7 @@ function compressSVG(svg) {
     .replace(/data-paper-data="[^"]*" /g, "").replace(/<!--[\s\S]*?-->/g, "")
     .replace(/<title>[\s\S]*?<\/title>/g, "").replace(/<desc>[\s\S]*?<\/desc>/g, "")
     .replaceAll("#000000", "#000").replaceAll("#ffffff", "#fff").replaceAll("#00000000", "none")
-    .replace("svg version=\"1.1\" ", "").replace(/<metadata>[\s\S]*?<\/metadata>/g, "")
+    .replace("svg version=\"1.1\" ", "svg ").replace(/<metadata>[\s\S]*?<\/metadata>/g, "")
     .replace(/<\?xml[\s\S]*?\?>/g, "").replace(/(\d+)\.0+(?!\d)/g, "$1").replace(/(\d+\.\d*?)0+(?!\d)/g, "$1")
     .replace(/<g>\s*<\/g>/g, "").replace(/\s*style=""/g, "")
     .replace(/>\s+</g, "><").replace(/\s+$/g, "").trim();
