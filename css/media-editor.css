@@ -52,11 +52,11 @@
 }
 .video-media {
   max-width: 500px;
-  max-height: 350px;
+  max-height: 300px;
 }
 .image-media {
   max-width: 500px;
-  max-height: 350px;
+  max-height: 300px;
 }
 
 .selector-ui {
@@ -91,10 +91,12 @@
 .media-submit {
   background: linear-gradient(125deg, #00ff84, #00c9ff);
   border: solid 3px #038142;
+  border-radius: 15px;
   padding: 5px 15px 5px 15px;
   width: 150px;
   font-family: Tilt Warp;
   font-size: 20px;
+  color: #fff;
   -webkit-text-stroke: 1px rgb(0, 138, 41);
   user-select: none;
   cursor: pointer;
