@@ -156,7 +156,7 @@ function showMediaEditor(namespace, fileType) {
     <div class="media-holder">
       ${ fileType === "mp4" ? 
         `<video class="video-media" src="${media.d}" controls></video>` :
-        fileType === "svg" ? `<div class="image-media">${media.d}</div>` : `<canvas class="image-media"></canvas>`
+        fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` : `<canvas class="image-media"></canvas>`
       }
     </div>
     ${ fileType === "mp4" ? "" : `
@@ -257,7 +257,6 @@ function showMediaEditor(namespace, fileType) {
   } else {
     if (fileType === "svg") {
       const svg = editor.querySelector(`div[class="media-holder"] svg`);
-      svg.outerHTML = compressSVG(svg.outerHTML);
       svg.setAttribute("preserveAspectRatio", "none");
 
       editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
@@ -366,6 +365,9 @@ function mediaBarSetup(bar) {
   fileBtn.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
+      // delete old media if different
+      if (fileLabel.textContent !== file.name) delete uploadData.media[fileLabel.textContent];
+
       const type = toFixedType(file.type);
       if (type === undefined) {
         e.target.value = "";
