@@ -134,10 +134,12 @@ input:invalid:focus {
   line-height: 100%;
   user-select: none;
   color: #d8d8d8;
-  transition: transform 100ms ease-in-out, color 100ms ease-in-out;
+  transition: transform 100ms ease-in-out, color 100ms ease-in-out, margin-left 100ms ease-in-out, margin-right 100ms ease-in-out;
 }
 .media-file:hover {
   transform: scale(1.1);
+  margin-left: 5%;
+  margin-right: 5%;
   color: #00ff84;
 }
 input[type="file"] {
