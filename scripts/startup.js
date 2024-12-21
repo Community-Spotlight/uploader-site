@@ -152,7 +152,7 @@ function showMediaEditor(namespace, fileType) {
   const editor = document.createElement("div");
   editor.classList.add("editor");
   editor.innerHTML = `
-    <div class="header">Promotion Media Editor</div>
+    <u class="header">Promotion Media Editor</u>
     <div class="media-holder">
       ${ fileType === "mp4" ? 
         `<video class="video-media" src="${media.d}" controls></video>` :
@@ -266,6 +266,7 @@ function showMediaEditor(namespace, fileType) {
       } else {
         lengthChildren[2].style.color = "pink";
       }
+      testRequirements();
     });
   } else {
     if (fileType === "svg") {
@@ -281,6 +282,7 @@ function showMediaEditor(namespace, fileType) {
         svg.setAttribute("height", value[1]);
 
         media.d = btoa(svg.outerHTML);
+        testRequirements();
         e.stopPropagation();
       });
     } else {
@@ -306,6 +308,7 @@ function showMediaEditor(namespace, fileType) {
         canvas.height = value[1];
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         media.d = canvas.toDataURL().split(",")[1];
+        testRequirements();
         e.stopPropagation();
       });
     }
@@ -378,18 +381,13 @@ function mediaBarSetup(bar) {
   fileBtn.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) {
+      e.target.value = "";
       // delete old media if different
       if (fileLabel.textContent !== file.name) delete uploadData.media[fileLabel.textContent];
 
       const type = toFixedType(file.type);
-      if (type === undefined) {
-        e.target.value = "";
-        return alert("Unsupported File Type! Please Read the Guidelines");
-      }
-      if (file.size > 10000000) {
-        e.target.value = "";
-        return alert("File Size Exceeds the 10MB Limit!");
-      }
+      if (type === undefined) return alert("Unsupported File Type! Please Read the Guidelines");
+      if (file.size > 10000000) return alert("File Size Exceeds the 10MB Limit!");
       const reader = new FileReader();
       if (type === "svg") reader.readAsText(file);
       else reader.readAsDataURL(file);
