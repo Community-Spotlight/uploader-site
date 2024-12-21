@@ -397,7 +397,6 @@ function compressSVG(svg) {
     .replace(/<\?xml[\s\S]*?\?>/g, "").replace(/(\d+)\.0+(?!\d)/g, "$1").replace(/(\d+\.\d*?)0+(?!\d)/g, "$1")
     .replace(/<g>\s*<\/g>/g, "").replace(/\s*style=""/g, "")
     .replace(/>\s+</g, "><").replace(/\s+$/g, "").trim();
-  }
 }
 
 document.querySelector("form").addEventListener("submit", async (e) => {
