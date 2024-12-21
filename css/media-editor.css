@@ -88,19 +88,21 @@
   justify-items: center;
 }
 
-.exit-btn {
-  margin: 10px;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  right: 2%;
-  top: 2%;
-  transition: transform 100ms ease-in-out, filter 100ms ease-in-out;
-  transform: scale(1);
-  filter: grayscale(1);
+.submit {
+  background: linear-gradient(125deg, #00ff84, #00c9ff);
+  border: solid 3px #038142;
+  padding: 5px 15px 5px 15px;
+  width: 150px;
+  font-family: Tilt Warp;
+  font-size: 20px;
+  -webkit-text-stroke: 1px rgb(0, 138, 41);
+  user-select: none;
   cursor: pointer;
+  transition: transform 300ms ease-in-out, letter-spacing 500ms ease-in-out, border 300ms ease-in-out;
+  transform: scale(1);
 }
-.exit-btn:hover {
-  transform: scale(1.3);
-  filter: grayscale(0);
+.submit:hover {
+  letter-spacing: 2px;
+  border: solid 3px #037981;
+  transform: scale(1.1);
 }
