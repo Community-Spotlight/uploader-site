@@ -93,12 +93,12 @@ function showMediaRules() {
   inner.innerHTML = `
     <u class="header">Promotion Media Guidelines</u>
     <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
+    <div class="gtext-box"><b>Important:</b> Promotions will be active for approximately 2 Weeks after being Approved by a Team Member</div>
     <div class="title">-= General Rules =-</div>
     <div class="gdesc">
       <ul class="list">
         <li>All Files must be 10MB or Under</li>
         <li>Promotions must be Appropriate</li>
-        <li>Promotions will be Active for Approximately 2 Weeks after being Approved by a Team Member</li>
       </ul>
     </div>
     <div class="title">-= Rules for Image Promotions =-</div>
@@ -117,7 +117,7 @@ function showMediaRules() {
       </ul>
     </div>
     <div class="title">-= Rules for HTML Promotions =-</div>
-    <div class="list">...Coming Soon</div>
+    <div class="gtext-box">...Coming Soon</div>
   `;
 
   inner.querySelector(`div[class="exit-btn"]`).addEventListener("click", (e) => {
@@ -180,7 +180,7 @@ function showMediaEditor(namespace, fileType) {
         }
       </select>
     </div>
-    <div class="title">Important Checks</div>
+    <div class="title">Required Checks</div>
     <div class="box">
       <img width="20" src="assets/bad.svg" draggable="false">
       <img width="20" src="assets/good.svg" draggable="false">
