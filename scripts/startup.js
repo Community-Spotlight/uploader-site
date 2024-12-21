@@ -155,7 +155,7 @@ function showMediaEditor(namespace, fileType) {
     <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
     <div class="media-holder">
       ${ fileType === "mp4" ? 
-        `<video class="video-media" src="${media.d}"></video>` : `<canvas class="image-media"></canvas>`
+        `<video class="video-media" src="${media.d}" controls></video>` : `<canvas class="image-media"></canvas>`
       }
     </div>
     <div class="title">Aspect Ratio</div>
@@ -183,12 +183,12 @@ function showMediaEditor(namespace, fileType) {
     <div class="title">Required Checks</div>
     <div class="box">
       <img width="20" src="assets/bad.svg" draggable="false">
-      <img width="20" src="assets/good.svg" draggable="false">
+      <img width="20" src="assets/good.svg" draggable="false" style="display: none">
       <span class="check-desc">Aspect Ratio Selected</span>
     </div>
     ${ fileType === "mp4" ? `<div class="box">
       <img width="20" src="assets/bad.svg" draggable="false">
-      <img width="20" src="assets/good.svg" draggable="false">
+      <img width="20" src="assets/good.svg" draggable="false" style="display: none">
       <span class="check-desc">Video Length in Range</span>
     </div>` : ""
     }
@@ -210,6 +210,55 @@ function showMediaEditor(namespace, fileType) {
   editor.animate(
     [{ transform: "translate(-50%, -50%) scale(0)" }, { transform: "translate(-50%, -50%) scale(1)" }], { duration: 300, easing: "ease-in-out" }
   );
+
+  const allCheckers = editor.querySelectorAll(`div[class="box"]`);
+
+  if (fileType === "mp4") {
+    const video = editor.querySelector(`div[class="media-holder"] video`);
+
+    editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
+      const children = allCheckers[0].children;
+      children[0].style.display = "none";
+      children[1].style.display = "";
+
+      e.stopPropagation();
+    });
+
+    // check if the video length is valid
+    const children = allCheckers[1].children;
+    const length = Math.floor(video.duration);
+    if (length === 5 || length === 10 || length === 15 || length === 30) {
+      children[0].style.display = "none";
+      children[1].style.display = "";
+    } else {
+      children[2].style.color = "pink";
+    }
+  } else {
+    const canvas = editor.querySelector(`div[class="media-holder"] canvas`);
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.onerror = (e) => { console.warn(e) };
+    img.src = media.d;
+
+    editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
+      const children = allCheckers[0].children;
+      children[0].style.display = "none";
+      children[1].style.display = "";
+      const value = JSON.parse(e.target.value);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.width = value[0];
+      canvas.height = value[1];
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      media.d = canvas.toDataURL().split(",")[1];
+      e.stopPropagation();
+    });
+  }
 }
 
 /* Internal Utils */
