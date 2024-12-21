@@ -377,6 +377,8 @@ function mediaBarSetup(bar) {
 
   const fileBtn = bar.querySelector(`input[id="file-input"]`);
   fileBtn.addEventListener("change", (e) => {
+    fileBtn.style.borderColor = "";
+    fileBtn.style.color = "";
     const file = e.target.files[0];
     if (file) {
       e.target.value = "";
@@ -413,7 +415,10 @@ function compressSVG(svg) {
 document.querySelector("form").addEventListener("submit", (e) => {
   e.preventDefault();
   if (Object.keys(uploadData.media).length === 0) {
-    document.querySelectorAll(`input[type="file"]`)[1].scrollIntoView({ behavior: "smooth", block: "center" });
+    const fileInp = document.querySelectorAll(`input[type="file"]`)[1];
+    fileInp.previousElementSibling.style.borderColor = "pink";
+    fileInp.previousElementSibling.style.color = "pink";
+    fileInp.scrollIntoView({ behavior: "smooth", block: "center" });
     return alert("You must Upload at least 1 Promotion to Submit");
   }
   if (e.target.checkValidity() && !hasSubmitted) {
