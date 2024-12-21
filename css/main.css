@@ -152,6 +152,7 @@ input[type="file"] {
 .submit {
   background: linear-gradient(125deg, #00ff84, #00c9ff);
   border: solid 5px #038142;
+  border-radius: 20px;
   padding: 0px 50px 0px 50px;
   margin-bottom: 25px;
   width: auto;
