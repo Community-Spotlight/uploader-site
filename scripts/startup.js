@@ -377,8 +377,8 @@ function mediaBarSetup(bar) {
 
   const fileBtn = bar.querySelector(`input[id="file-input"]`);
   fileBtn.addEventListener("change", (e) => {
-    fileBtn.style.borderColor = "";
-    fileBtn.style.color = "";
+    fileLabel.style.borderColor = "";
+    fileLabel.style.color = "";
     const file = e.target.files[0];
     if (file) {
       e.target.value = "";
