@@ -88,7 +88,7 @@
   justify-items: center;
 }
 
-.submit {
+.media-submit {
   background: linear-gradient(125deg, #00ff84, #00c9ff);
   border: solid 3px #038142;
   padding: 5px 15px 5px 15px;
@@ -101,7 +101,7 @@
   transition: transform 300ms ease-in-out, letter-spacing 500ms ease-in-out, border 300ms ease-in-out;
   transform: scale(1);
 }
-.submit:hover {
+.media-submit:hover {
   letter-spacing: 2px;
   border: solid 3px #037981;
   transform: scale(1.1);
