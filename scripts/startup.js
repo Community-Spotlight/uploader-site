@@ -155,20 +155,15 @@ function showMediaEditor(namespace, fileType) {
     <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
     <div class="media-holder">
       ${ fileType === "mp4" ? 
-        `<video class="video-media" src="${media.d}" controls></video>` : `<canvas class="image-media"></canvas>`
+        `<video class="video-media" src="${media.d}" controls></video>` :
+        fileType === "svg" ? `<div class="image-media">${media.d}</div>` : `<canvas class="image-media"></canvas>`
       }
     </div>
-    <div class="title">Aspect Ratio</div>
-    <div class="selector-ui">
-      <select>
-        <option value="" selected disabled hidden>Choose Scale</option>
-        ${ fileType === "mp4" ? `
-          <option value="1">1:1</option>
-          <option value="2">4:3</option>
-          <option value="3">4:5</option>
-          <option value="4">16:9</option>
-          <option value="5">9:16</option>
-        ` : `
+    ${ fileType === "mp4" ? "" : `
+      <div class="title">Aspect Ratio</div>
+      <div class="selector-ui">
+        <select>
+          <option value="" selected disabled hidden>Choose Scale</option>
           <option value="[250,250]">250x250</option>
           <option value="[300,250]">300x250</option>
           <option value="[480,270]">480x270</option>
@@ -176,21 +171,28 @@ function showMediaEditor(namespace, fileType) {
           <option value="[50,300]">50x300</option>
           <option value="[360,120]">360x120</option>
           <option value="[120,360]">120x360</option>
-        `
-        }
-      </select>
-    </div>
+        </select>
+      </div>
+    `
+    }
     <div class="title">Required Checks</div>
-    <div class="box">
-      <img width="20" src="assets/bad.svg" draggable="false">
-      <img width="20" src="assets/good.svg" draggable="false" style="display: none">
-      <span class="check-desc">Aspect Ratio Selected</span>
-    </div>
-    ${ fileType === "mp4" ? `<div class="box">
-      <img width="20" src="assets/bad.svg" draggable="false">
-      <img width="20" src="assets/good.svg" draggable="false" style="display: none">
-      <span class="check-desc">Video Length in Range</span>
-    </div>` : ""
+    ${ fileType === "mp4" ? `
+      <div class="box">
+        <img width="20" src="assets/bad.svg" draggable="false">
+        <img width="20" src="assets/good.svg" draggable="false" style="display: none">
+        <span class="check-desc">Aspect Ratio Allowed</span>
+      </div>
+      <div class="box">
+        <img width="20" src="assets/bad.svg" draggable="false">
+        <img width="20" src="assets/good.svg" draggable="false" style="display: none">
+        <span class="check-desc">Video Length in Range</span>
+      </div>` : `
+      <div class="box">
+        <img width="20" src="assets/bad.svg" draggable="false">
+        <img width="20" src="assets/good.svg" draggable="false" style="display: none">
+        <span class="check-desc">Aspect Ratio Selected</span>
+      </div>
+      `
     }
   `;
 
@@ -212,52 +214,89 @@ function showMediaEditor(namespace, fileType) {
   );
 
   const allCheckers = editor.querySelectorAll(`div[class="box"]`);
-
   if (fileType === "mp4") {
     const video = editor.querySelector(`div[class="media-holder"] video`);
+    video.addEventListener("loadedmetadata", () => {
+      // check if the video aspect ratio is valid
+      //// we cant reliably set the video aspect ratio... so make our users do it
+      const aspectRatio = Math.floor(video.videoWidth / video.videoHeight);
+      const commonRatios = {
+        "1:1": 1,
+        "4:3": Math.floor(4 / 3),
+        "4:5": Math.floor(4 / 5),
+        "16:9": Math.floor(16 / 9),
+        "9:16": Math.floor(9 / 16)
+      };
+      let matchedRatio = null;
+      for (const [key, ratio] of Object.entries(commonRatios)) {
+        if (aspectRatio === ratio) {
+          matchedRatio = key;
+          break;
+        }
+      }
 
-    editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
-      const children = allCheckers[0].children;
-      children[0].style.display = "none";
-      children[1].style.display = "";
+      const ratioChildren = allCheckers[0].children;
+      if (matchedRatio) {
+        ratioChildren[0].style.display = "none";
+        ratioChildren[1].style.display = "";
+        media.d = media.d.split(",")[1];
+      } else {
+        ratioChildren[2].style.color = "pink";
+      }
 
-      e.stopPropagation();
+      // check if the video length is valid
+      const lengthChildren = allCheckers[1].children;
+      const length = Math.floor(video.duration);
+      if (length === 5 || length === 10 || length === 15 || length === 30) {
+        lengthChildren[0].style.display = "none";
+        lengthChildren[1].style.display = "";
+      } else {
+        lengthChildren[2].style.color = "pink";
+      }
     });
-
-    // check if the video length is valid
-    const children = allCheckers[1].children;
-    const length = Math.floor(video.duration);
-    if (length === 5 || length === 10 || length === 15 || length === 30) {
-      children[0].style.display = "none";
-      children[1].style.display = "";
-    } else {
-      children[2].style.color = "pink";
-    }
   } else {
-    const canvas = editor.querySelector(`div[class="media-holder"] canvas`);
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-    img.onerror = (e) => { console.warn(e) };
-    img.src = media.d;
+    if (fileType === "svg") {
+      const svg = editor.querySelector(`div[class="media-holder"] svg`);
+      svg.outerHTML = compressSVG(svg.outerHTML);
+      svg.setAttribute("preserveAspectRatio", "none");
 
-    editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
-      const children = allCheckers[0].children;
-      children[0].style.display = "none";
-      children[1].style.display = "";
-      const value = JSON.parse(e.target.value);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      canvas.width = value[0];
-      canvas.height = value[1];
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      media.d = canvas.toDataURL().split(",")[1];
-      e.stopPropagation();
-    });
+      editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
+        const children = allCheckers[0].children;
+        children[0].style.display = "none";
+        children[1].style.display = "";
+        const value = JSON.parse(e.target.value);
+        svg.setAttribute("width", value[0]);
+        svg.setAttribute("height", value[1]);
+
+        media.d = btoa(svg.outerHTML);
+        e.stopPropagation();
+      });
+    } else {
+      const canvas = editor.querySelector(`div[class="media-holder"] canvas`);
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.onerror = (e) => { console.warn(e) };
+      img.src = media.d;
+
+      editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
+        const children = allCheckers[0].children;
+        children[0].style.display = "none";
+        children[1].style.display = "";
+        const value = JSON.parse(e.target.value);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = value[0];
+        canvas.height = value[1];
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        media.d = canvas.toDataURL().split(",")[1];
+        e.stopPropagation();
+      });
+    }
   }
 }
 
@@ -337,7 +376,8 @@ function mediaBarSetup(bar) {
         return alert("File Size Exceeds the 10MB Limit!");
       }
       const reader = new FileReader();
-      reader.readAsDataURL(file);
+      if (type === "svg") reader.readAsText(file);
+      else reader.readAsDataURL(file);
       reader.onload = () => {
         fileLabel.textContent = file.name;
         uploadData.media[file.name] = { t: type, d: reader.result };
@@ -346,6 +386,18 @@ function mediaBarSetup(bar) {
       reader.onerror = (err) => { console.warn(err) };
     }
   });
+}
+
+function compressSVG(svg) {
+  return svg
+    .replace(/data-paper-data="[^"]*" /g, "").replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<title>[\s\S]*?<\/title>/g, "").replace(/<desc>[\s\S]*?<\/desc>/g, "")
+    .replaceAll("#000000", "#000").replaceAll("#ffffff", "#fff").replaceAll("#00000000", "none")
+    .replace("svg version=\"1.1\" ", "").replace(/<metadata>[\s\S]*?<\/metadata>/g, "")
+    .replace(/<\?xml[\s\S]*?\?>/g, "").replace(/(\d+)\.0+(?!\d)/g, "$1").replace(/(\d+\.\d*?)0+(?!\d)/g, "$1")
+    .replace(/<g>\s*<\/g>/g, "").replace(/\s*style=""/g, "")
+    .replace(/>\s+</g, "><").replace(/\s+$/g, "").trim();
+  }
 }
 
 document.querySelector("form").addEventListener("submit", async (e) => {
