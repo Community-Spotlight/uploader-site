@@ -373,12 +373,14 @@ function mediaBarSetup(bar) {
   });
 
   const fileLabel = bar.querySelector(`div[class="media-file"]`);
-  fileLabel.addEventListener("click", () => fileBtn.click());
+  fileLabel.addEventListener("click", () => {
+    fileLabel.style.borderColor = "";
+    fileLabel.style.color = "";
+    fileBtn.click();
+  });
 
   const fileBtn = bar.querySelector(`input[id="file-input"]`);
   fileBtn.addEventListener("change", (e) => {
-    fileLabel.style.borderColor = "";
-    fileLabel.style.color = "";
     const file = e.target.files[0];
     if (file) {
       e.target.value = "";
@@ -428,6 +430,7 @@ document.querySelector("form").addEventListener("submit", (e) => {
     console.log("Submitting Promotion...");
     const loadScreen = showLoadingGUI();
     const urlData = constructPost();
+    // TODO use free file hoster like catbox to send media to
     fetch(urlData)
       .then((r) => {
         console.log("Promotion Submitted!");
