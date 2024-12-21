@@ -51,10 +51,12 @@
   justify-items: center;
 }
 .video-media {
-
+  max-width: 500px;
+  max-height: 350px;
 }
 .image-media {
-
+  max-width: 500px;
+  max-height: 350px;
 }
 
 .selector-ui {
