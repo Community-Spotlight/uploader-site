@@ -342,11 +342,22 @@ function generateDate() {
   return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${hr}:${min}`;
 }
 
-function constructPost() {
+async function constructPost() {
+  const id = generateID(), date = generateDate();
+
+  // compress data
+  const fixedTags = btoa(uploadData.tags.join(","));
+  const fixedName = btoa(uploadData.name);
+  const fixedUrl = btoa(uploadData.url);
+
+  // send media to file servers
+  let fixedMedia = await uploadFiles(uploadData.media, id);
+  fixedMedia = JSON.stringify(fixedMedia);
+
   let url = "https://script.google.com/macros/s/AKfycbwb49wDXQjOBxtGfjg-bpyMXckewOntlqIyqZejA8MkEUu7I7juDctKLbMXrf6IBjUc-w/exec?gid=0";
-  url += `&upload-id=${encodeURIComponent(generateID())}&date=${encodeURIComponent(generateDate())}`;
-  url += `&product-name=${encodeURIComponent(uploadData.name)}&product-url=${encodeURIComponent(uploadData.url)}`;
-  url += `&tags=${encodeURIComponent(JSON.stringify(uploadData.tags))}&media=${encodeURIComponent(JSON.stringify(Object.values(uploadData.media)))}`;
+  url += `&upload-id=${encodeURIComponent(id)}&date=${encodeURIComponent(date)}`;
+  url += `&product-name=${encodeURIComponent(fixedName)}&product-url=${encodeURIComponent(fixedUrl)}`;
+  url += `&tags=${encodeURIComponent(fixedTags)}&media=${encodeURIComponent(fixedMedia)}`;
   url += `&opt-ping-id=${uploadData.optID || "0"}`;
   return url;
 }
@@ -413,7 +424,7 @@ function compressSVG(svg) {
     .replace(/>\s+</g, "><").replace(/\s+$/g, "").trim();
 }
 
-document.querySelector("form").addEventListener("submit", (e) => {
+document.querySelector("form").addEventListener("submit", async (e) => {
   e.preventDefault();
   if (Object.keys(uploadData.media).length === 0) {
     const fileInp = document.querySelectorAll(`input[type="file"]`)[1];
@@ -428,8 +439,7 @@ document.querySelector("form").addEventListener("submit", (e) => {
 
     console.log("Submitting Promotion...");
     const loadScreen = showLoadingGUI();
-    const urlData = constructPost();
-    // TODO use free file hoster like catbox to send media to
+    const urlData = await constructPost();
     fetch(urlData)
       .then((r) => {
         console.log("Promotion Submitted!");
