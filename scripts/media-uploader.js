@@ -28,9 +28,7 @@ async function uploadFile(base64, id, i) {
   formData.append("file", blob, fileName);
   return fetch("https://yeetyourfiles.lol/api/upload", { method: "POST", body: formData })
     .then(response => response.json())
-    .then(data => {
-      return JSON.stringify(data);
-    })
+    .then(data => { return data })
     .catch(e => {
       console.warn("POST ERROR:", e);
       return undefined;
