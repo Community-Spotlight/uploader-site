@@ -73,7 +73,7 @@ function showLoadingGUI() {
   holder.classList.add("overlay");
   const loadCirc = document.createElement("div");
   loadCirc.classList.add("load-circle");
-  loadCirc.innerHTML = `<img width="200" src="assets/loader.svg" draggable="false">`;
+  loadCirc.innerHTML = `<img width="200" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/loader.svg" draggable="false">`;
 
   holder.appendChild(loadCirc);
   document.body.appendChild(holder);
@@ -92,7 +92,7 @@ function showMediaRules() {
   inner.classList.add("guideline-inner");
   inner.innerHTML = `
     <u class="header">Promotion Media Guidelines</u>
-    <div class="exit-btn"><img width="20" src="assets/exit.svg" draggable="false"></div>
+    <div class="exit-btn"><img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/exit.svg" draggable="false"></div>
     <div class="gtext-box"><b>Important:</b> Promotions will be active for approximately 2 Weeks after being Approved by a Team Member</div>
     <div class="title">-= General Rules =-</div>
     <div class="gdesc">
@@ -178,18 +178,18 @@ function showMediaEditor(namespace, fileType) {
     <div class="title">Required Checks</div>
     ${ fileType === "mp4" ? `
       <div class="box">
-        <img width="20" src="assets/bad.svg" draggable="false">
-        <img width="20" src="assets/good.svg" draggable="false" style="display: none">
+        <img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/bad.svg" draggable="false">
+        <img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/good.svg" draggable="false" style="display: none">
         <span class="check-desc">Aspect Ratio Allowed</span>
       </div>
       <div class="box">
-        <img width="20" src="assets/bad.svg" draggable="false">
-        <img width="20" src="assets/good.svg" draggable="false" style="display: none">
+        <img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/bad.svg" draggable="false">
+        <img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/good.svg" draggable="false" style="display: none">
         <span class="check-desc">Video Length in Range</span>
       </div>` : `
       <div class="box">
-        <img width="20" src="assets/bad.svg" draggable="false">
-        <img width="20" src="assets/good.svg" draggable="false" style="display: none">
+        <img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/bad.svg" draggable="false">
+        <img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/good.svg" draggable="false" style="display: none">
         <span class="check-desc">Aspect Ratio Selected</span>
       </div>
       `
