@@ -21,6 +21,8 @@
   text-align: center;
   justify-content: center;
   justify-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .header {
