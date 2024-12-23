@@ -28,10 +28,12 @@
   font-family: Tilt Warp;
   font-size: 25px;
   padding: 0 50px 0 50px;
+  white-space: nowrap;
 }
 .title {
   font-family: Tilt Warp;
   font-size: 18px;
+  white-space: nowrap;
 }
 .check-desc {
   font-family: Arial, Sans-Serif, Helvetica;
