@@ -344,7 +344,7 @@ function generateDate() {
 
 function encodeTxt(txt) {
     let encoded = [];
-    for (let i = 0; i < txt.length; i++) newName.push(txt.charCodeAt(i));
+    for (let i = 0; i < txt.length; i++) encoded.push(txt.charCodeAt(i));
     return btoa(encoded.join(","));
 }
 
