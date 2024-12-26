@@ -342,13 +342,19 @@ function generateDate() {
   return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${hr}:${min}`;
 }
 
+function encodeTxt(txt) {
+    let encoded = [];
+    for (let i = 0; i < txt.length; i++) newName.push(txt.charCodeAt(i));
+    return btoa(encoded.join(","));
+}
+
 async function constructPost() {
   const id = generateID(), date = generateDate();
 
   // compress data
-  const fixedTags = btoa(uploadData.tags.join(","));
-  const fixedName = btoa(uploadData.name);
-  const fixedUrl = btoa(uploadData.url);
+  const fixedTags = encodeTxt(uploadData.tags.join(","));
+  const fixedName = encodeTxt(uploadData.name);
+  const fixedUrl = encodeTxt(uploadData.url);
 
   // send media to file servers
   let fixedMedia = await uploadFiles(uploadData.media, id);
