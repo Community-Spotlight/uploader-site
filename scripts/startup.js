@@ -99,6 +99,8 @@ function showMediaRules() {
       <ul class="list">
         <li>All Files must be 10MB or Under</li>
         <li>Promotions must be Appropriate</li>
+        <li>NSFW/Racism/Homophobia/Spam is NOT allowed</li>
+        <li>Viruses/Malware is NOT allowed</li>
       </ul>
     </div>
     <div class="title">-= Rules for Image Promotions =-</div>
