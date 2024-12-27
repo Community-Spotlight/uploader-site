@@ -26,6 +26,7 @@ async function uploadFile(base64, id, i) {
 
   const formData = new FormData();
   formData.append("file", blob, fileName);
+  formData.append("deletable", "true");
   return fetch("https://yeetyourfiles.lol/api/upload", { method: "POST", body: formData })
     .then(response => response.json())
     .then(data => { return data })
