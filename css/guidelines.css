@@ -6,6 +6,9 @@
   top: 0;
   z-index: 999;
   background-color: rgba(0,0,0,0.4);
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100vh;
 }
 .guideline-inner {
   padding: 25px;
@@ -13,6 +16,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  margin-top: 100px;
   background-color: #1f1f1f;
   border: solid grey 5px;
   border-radius: 25px;
@@ -21,8 +25,6 @@
   text-align: center;
   justify-content: center;
   justify-items: center;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .header {
