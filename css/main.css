@@ -19,6 +19,9 @@ body {
   display: grid;
   padding: 10px;
 }
+.navTitle {
+  text-align: center;
+}
 .innerNav img {
   cursor: pointer;
   box-shadow: #03524e 0px 0px 15px;
@@ -176,11 +179,11 @@ input[type="file"] {
 }
 
 ::-webkit-scrollbar {
-  background-color: #00000000;
+  background-color: #000;
   width: 13px;
 }
 ::-webkit-scrollbar-track {
-  background-color: #00000000;
+  background-color: #000;
   width: 13px;
 }
 ::-webkit-scrollbar-thumb {
