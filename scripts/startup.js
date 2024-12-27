@@ -232,24 +232,17 @@ function showMediaEditor(namespace, fileType) {
     video.addEventListener("loadedmetadata", () => {
       // check if the video aspect ratio is valid
       //// we cant reliably set the video aspect ratio... so make our users do it
-      const aspectRatio = Math.floor(video.videoWidth / video.videoHeight);
-      const commonRatios = {
-        "1:1": 1,
-        "4:3": Math.floor(4 / 3),
-        "4:5": Math.floor(4 / 5),
-        "16:9": Math.floor(16 / 9),
-        "9:16": Math.floor(9 / 16)
-      };
-      let matchedRatio = null;
-      for (const [key, ratio] of Object.entries(commonRatios)) {
-        if (aspectRatio === ratio) {
-          matchedRatio = key;
-          break;
-        }
+      const videoAspectRatio = (w, h) => {
+        let gcd = (a, b) => { return b ? gcd(b, a % b) : a };
+        gcd = gcd(w, h);
+        return `${w / gcd}:${h / gcd}`;
       }
 
+      const commonRatios = ["1:1", "4:3", "4:5", "16:9", "9:16"];
+      const vidRatio = videoAspectRatio(video.videoWidth, video.videoHeight);
+
       const ratioChildren = allCheckers[0].children;
-      if (matchedRatio) {
+      if (commonRatios.indexOf(vidRatio) > -1) {
         ratioChildren[0].style.display = "none";
         ratioChildren[1].style.display = "";
         media.d = media.d.split(",")[1];
