@@ -88,6 +88,8 @@ function showMediaRules() {
   
   const holder = document.createElement("div");
   holder.classList.add("overlay");
+  const heightOffset = document.createElement("div");
+  heightOffset.style.height = "130%";
   const inner = document.createElement("div");
   inner.classList.add("guideline-inner");
   inner.innerHTML = `
@@ -133,7 +135,7 @@ function showMediaRules() {
     e.stopPropagation();
   });
 
-  holder.appendChild(inner);
+  holder.append(inner, heightOffset);
   document.body.appendChild(holder);
   inner.animate(
     [{ transform: "translate(-50%, -50%) scale(0)" }, { transform: "translate(-50%, -50%) scale(1)" }], { duration: 300, easing: "ease-in-out" }
