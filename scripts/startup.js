@@ -89,7 +89,7 @@ function showMediaRules() {
   const holder = document.createElement("div");
   holder.classList.add("overlay");
   const heightOffset = document.createElement("div");
-  heightOffset.style.height = "130%";
+  heightOffset.style.height = "120vh";
   const inner = document.createElement("div");
   inner.classList.add("guideline-inner");
   inner.innerHTML = `
@@ -103,6 +103,7 @@ function showMediaRules() {
         <li>Promotions must be Appropriate</li>
         <li>NSFW/Racism/Homophobia/Spam is NOT allowed</li>
         <li>Viruses/Malware is NOT allowed</li>
+        <li>Copyrighted Content is NOT allowed unless Permission Granted by Owner</li>
       </ul>
     </div>
     <div class="title">-= Rules for Image Promotions =-</div>
@@ -121,7 +122,14 @@ function showMediaRules() {
       </ul>
     </div>
     <div class="title">-= Rules for HTML Promotions =-</div>
-    <div class="gtext-box">...Coming Soon</div>
+    <div class="gtext-box">
+      <ul class="list">
+        <li>Acceptable Aspect Ratios: 1:1, 4:3, 4:5, 16:9, 9:16</li>
+        <li>Popups, Downloads, or Code that modifies the outter DOM is NOT allowed</li>
+        <li>Tracking/use of Local Storage is NOT allowed</li>
+        <li>All Audio/Video must be User-Initiated or Muted by default</li>
+      </ul>
+    </div>
   `;
 
   inner.querySelector(`div[class="exit-btn"]`).addEventListener("click", (e) => {
