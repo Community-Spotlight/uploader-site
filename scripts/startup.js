@@ -89,7 +89,7 @@ function showMediaRules() {
   const holder = document.createElement("div");
   holder.classList.add("overlay");
   const heightOffset = document.createElement("div");
-  heightOffset.style.height = "120vh";
+  heightOffset.style.height = "140vh";
   const inner = document.createElement("div");
   inner.classList.add("guideline-inner");
   inner.innerHTML = `
@@ -122,7 +122,7 @@ function showMediaRules() {
       </ul>
     </div>
     <div class="title">-= Rules for HTML Promotions =-</div>
-    <div class="gtext-box">
+    <div class="gdesc">
       <ul class="list">
         <li>Acceptable Aspect Ratios: 1:1, 4:3, 4:5, 16:9, 9:16</li>
         <li>Popups, Downloads, or Code that modifies the outter DOM is NOT allowed</li>
