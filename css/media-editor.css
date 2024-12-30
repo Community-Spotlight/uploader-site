@@ -42,7 +42,8 @@
 
 .media-holder {
   width: 100%;
-  margin: 10px 20px 10px 20px;
+  /*margin: 10px 20px 10px 20px;*/
+  margin: auto;
   padding: 10px;
   border: solid grey 1.5px;
   border-radius: 10px;
