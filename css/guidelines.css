@@ -12,11 +12,11 @@
 }
 .guideline-inner {
   padding: 25px;
+  margin-top: 10vh;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  margin-top: 100px;
   background-color: #1f1f1f;
   border: solid grey 5px;
   border-radius: 25px;
