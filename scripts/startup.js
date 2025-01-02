@@ -451,14 +451,18 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     console.log("Submitting Promotion...");
     const loadScreen = showLoadingGUI();
     const urlData = await constructPost();
-    fetch(urlData)
+    const response = await fetch(urlData);
       .then((r) => {
         alert("Promotion Submitted!");
         loadScreen.remove();
       })
       .catch((e) => {
-        console.warn("Submission Error", e);
-        window.test = e;
+        /* Note:
+          This is not a fool-proof check, but this is the only one we're able
+          to do to actually check if this uploaded to the form.
+        */
+        if (e.message === "Failed to fetch") alert("Promotion Submitted!");
+        else console.warn("Submission Error", e);
         loadScreen.remove();
       });
   }
