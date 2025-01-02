@@ -95,39 +95,39 @@ function showMediaRules() {
   inner.innerHTML = `
     <u class="header">Promotion Media Guidelines</u>
     <div class="exit-btn"><img width="20" src="https://raw.githubusercontent.com/Community-Spotlight/assets/refs/heads/main/exit.svg" draggable="false"></div>
-    <div class="gtext-box"><b>Important:</b> Promotions will be active for approximately 2 Weeks after being Approved by a Team Member</div>
+    <div class="gtext-box"><b>Important:</b> Accepted Promotions will be active for 2 Weeks after being Approved by a Team Member</div>
     <div class="title">-= General Rules =-</div>
     <div class="gdesc">
       <ul class="list">
-        <li>All Files must be 10MB or Under</li>
-        <li>Promotions must be Appropriate</li>
-        <li>NSFW/Racism/Homophobia/Spam is NOT allowed</li>
-        <li>Viruses/Malware is NOT allowed</li>
-        <li>Copyrighted Content is NOT allowed unless Permission Granted by Owner</li>
+        <li>All Promotional Media <b>must</b> be 10MB or Under</li>
+        <li>Promotions <b>must</b> be Appropriate</li>
+        <li>NSFW/Racism/Homophobia/Spam is <b>not</b> allowed</li>
+        <li>Viruses, Trojans, and other Malware are <b>not</b> allowed</li>
+        <li>Copyrighted Content is <b>not</b> allowed unless Permission is granted by the Copyright Owner</li>
       </ul>
     </div>
     <div class="title">-= Rules for Image Promotions =-</div>
     <div class="gdesc">
       <ul class="list">
-        <li>Accepted Image Formats: PNG, JPG, JPEG, SVG</li>
-        <li>Acceptable Aspect Ratios: 250x250, 300x250, 480x270, 300x50, 50x300, 360x120, 120x360
+        <li><b>Accepted Formats:</b> PNG, JPG, JPEG, SVG</li>
+        <li><b>Accepted Aspect Ratios:</b> 250x250, 300x250, 480x270, 300x50, 50x300, 360x120, 120x360</li>
       </ul>
     </div>
     <div class="title">-= Rules for Video Promotions =-</div>
     <div class="gdesc">
       <ul class="list">
-        <li>Accepted Video Formats: MP4</li>
-        <li>Acceptable Aspect Ratios: 1:1, 4:3, 4:5, 16:9, 9:16</li>
-        <li>Mandatory Video Length: 5s, 10s, 15s, 30s</li>
+        <li><b>Accepted Formats:</b> MP4</li>
+        <li><b>Accepted Aspect Ratios:</b> 1:1, 4:3, 4:5, 16:9, 9:16</li>
+        <li><b>Mandatory Video Length:</b> 5s, 10s, 15s, 30s</li>
       </ul>
     </div>
     <div class="title">-= Rules for HTML Promotions =-</div>
     <div class="gdesc">
       <ul class="list">
-        <li>Acceptable Aspect Ratios: 1:1, 4:3, 4:5, 16:9, 9:16</li>
-        <li>Popups, Downloads, or Code that modifies the outter DOM is NOT allowed</li>
-        <li>Tracking/use of Local Storage is NOT allowed</li>
-        <li>All Audio/Video must be User-Initiated or Muted by default</li>
+        <li><b>Accepted Aspect Ratios:</b> 1:1, 4:3, 4:5, 16:9, 9:16</li>
+        <li>Popups, Downloads, or Code that modifies the outter DOM is <b>not</b> allowed</li>
+        <li>Tracking/use of Local Storage is <b>not</b> allowed</li>
+        <li>All Audio/Video <b>must</b> be User-Initiated or Muted by default</li>
       </ul>
     </div>
   `;
@@ -166,7 +166,7 @@ function showMediaEditor(namespace, fileType) {
   editor.innerHTML = `
     <u class="header">Promotion Media Editor</u>
     <div class="media-holder">
-      ${ fileType === "mp4" ? 
+      ${ fileType === "mp4" ?
         `<video class="video-media" src="${media.d}" controls></video>` :
         fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` : `<canvas class="image-media"></canvas>`
       }
@@ -330,7 +330,7 @@ function toFixedType(fileType) {
     case "video/mp4": return "mp4";
     // TODO add HTML when implemented
     default: return undefined;
-  }  
+  }
 }
 
 function generateID() {
