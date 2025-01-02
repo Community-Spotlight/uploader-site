@@ -451,7 +451,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     console.log("Submitting Promotion...");
     const loadScreen = showLoadingGUI();
     const urlData = await constructPost();
-    const response = await fetch(urlData);
+    fetch(urlData)
       .then((r) => {
         alert("Promotion Submitted!");
         loadScreen.remove();
