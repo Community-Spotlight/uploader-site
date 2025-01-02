@@ -453,11 +453,12 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     const urlData = await constructPost();
     fetch(urlData)
       .then((r) => {
-        console.log("Promotion Submitted!");
+        alert("Promotion Submitted!");
         loadScreen.remove();
       })
       .catch((e) => {
         console.warn("Submission Error", e);
+        window.test = e;
         loadScreen.remove();
       });
   }
