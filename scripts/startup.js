@@ -303,13 +303,14 @@ function showMediaEditor(namespace, fileType) {
       });
     } else if (fileType === "html") {
       const iframe = editor.querySelector(`div[class="media-holder"] iframe`);
-      media.d = media.d.split(",")[1];
+      const ogHTML = media.d.split(",")[1];
 
       editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
         const children = allCheckers[0].children;
         children[0].style.display = "none";
         children[1].style.display = "";
         const value = JSON.parse(e.target.value);
+        media.d = btoa(`<!-- CS META: ${value[0]},${value[1]} -->`) + ogHTML;
         iframe.style.width = value[0];
         iframe.style.height = value[1];
 
