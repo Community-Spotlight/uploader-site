@@ -168,7 +168,7 @@ function showMediaEditor(namespace, fileType) {
     <div class="media-holder">
       ${ fileType === "mp4" ?
         `<video class="video-media" src="${media.d}" controls></video>` :
-        fileType === "html" ? `<iframe class="video-media" src="${media.d}"></iframe>` :
+        fileType === "html" ? `<iframe class="html-media" src="${media.d}"></iframe>` :
         fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` :
         `<canvas class="image-media"></canvas>`
       }
@@ -179,11 +179,11 @@ function showMediaEditor(namespace, fileType) {
         <select>
           ${ fileType === "html"? `
             <option value="" selected disabled hidden>Choose Scale</option>
-            <option value="[1,1]">1:1</option>
-            <option value="[4,3]">4:3</option>
-            <option value="[4,5]">4:5</option>
-            <option value="[16,9]">16:9</option>
-            <option value="[9,16]">9:16</option>
+            <option value="[150,150]">1:1</option>
+            <option value="[240,180]">4:3</option>
+            <option value="[240,300]">4:5</option>
+            <option value="[360,202.5]">16:9</option>
+            <option value="[202.5,360]">9:16</option>
           ` : `
             <option value="" selected disabled hidden>Choose Scale</option>
             <option value="[250,250]">250x250</option>
@@ -309,9 +309,8 @@ function showMediaEditor(namespace, fileType) {
         children[0].style.display = "none";
         children[1].style.display = "";
         const value = JSON.parse(e.target.value);
-        const baseW = 200;
-        iframe.style.width = `${baseW}px`;
-        iframe.style.height = `${Math.round((baseW / value[0]) * value[1])}px`;
+        iframe.style.width = value[0];
+        iframe.style.height = value[1];
 
         testRequirements();
         e.stopPropagation();
