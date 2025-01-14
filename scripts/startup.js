@@ -183,7 +183,7 @@ function showMediaEditor(namespace, fileType) {
             <option value="[4,3]">4:3</option>
             <option value="[4,5]">4:5</option>
             <option value="[16,9]">16:9</option>
-            <option value="[9,16]">9:16/option>
+            <option value="[9,16]">9:16</option>
           ` : `
             <option value="" selected disabled hidden>Choose Scale</option>
             <option value="[250,250]">250x250</option>
@@ -310,8 +310,8 @@ function showMediaEditor(namespace, fileType) {
         children[1].style.display = "";
         const value = JSON.parse(e.target.value);
         const baseW = 800;
-        iframe.setAttribute("width", baseW);
-        iframe.setAttribute("height", Math.round((baseW / value[0]) * value[1]));
+        iframe.style.width = `${baseW}px`;
+        iframe.style.height = `${Math.round((baseW / value[0]) * value[1]))}px`;
 
         testRequirements();
         e.stopPropagation();
