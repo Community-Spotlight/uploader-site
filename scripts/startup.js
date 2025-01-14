@@ -168,7 +168,7 @@ function showMediaEditor(namespace, fileType) {
     <div class="media-holder">
       ${ fileType === "mp4" ?
         `<video class="video-media" src="${media.d}" controls></video>` :
-        fileType === "html" ? `<iframe class="video-media" src="${media.d)}"></iframe>` :
+        fileType === "html" ? `<iframe class="video-media" src="${media.d}"></iframe>` :
         fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` :
         `<canvas class="image-media"></canvas>`
       }
