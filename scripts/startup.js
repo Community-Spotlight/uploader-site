@@ -311,7 +311,7 @@ function showMediaEditor(namespace, fileType) {
         const value = JSON.parse(e.target.value);
         const baseW = 800;
         iframe.style.width = `${baseW}px`;
-        iframe.style.height = `${Math.round((baseW / value[0]) * value[1]))}px`;
+        iframe.style.height = `${Math.round((baseW / value[0]) * value[1])}px`;
 
         testRequirements();
         e.stopPropagation();
