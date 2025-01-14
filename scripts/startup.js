@@ -168,7 +168,8 @@ function showMediaEditor(namespace, fileType) {
     <div class="media-holder">
       ${ fileType === "mp4" ?
         `<video class="video-media" src="${media.d}" controls></video>` :
-        fileType === "svg" || fileType === "html" ? `<div class="image-media">${compressSVG(media.d)}</div>` :
+        fileType === "html" ? `<iframe class="video-media" src="${media.d)}"></iframe>` :
+        fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` :
         `<canvas class="image-media"></canvas>`
       }
     </div>
@@ -300,6 +301,21 @@ function showMediaEditor(namespace, fileType) {
         testRequirements();
         e.stopPropagation();
       });
+    } else if (fileType === "html") {
+      const iframe = editor.querySelector(`div[class="media-holder"] iframe`);
+
+      editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
+        const children = allCheckers[0].children;
+        children[0].style.display = "none";
+        children[1].style.display = "";
+        const value = JSON.parse(e.target.value);
+        const baseW = 800;
+        iframe.setAttribute("width", baseW);
+        iframe.setAttribute("height", Math.round((baseW / value[0]) * value[1]));
+
+        testRequirements();
+        e.stopPropagation();
+      });
     } else {
       const canvas = editor.querySelector(`div[class="media-holder"] canvas`);
       const ctx = canvas.getContext("2d");
@@ -422,7 +438,7 @@ function mediaBarSetup(bar) {
       if (type === undefined) return alert("Unsupported File Type! Please Read the Guidelines");
       if (file.size > 10000000) return alert("File Size Exceeds the 10MB Limit!");
       const reader = new FileReader();
-      if (type === "svg" || type === "html") reader.readAsText(file);
+      if (type === "svg") reader.readAsText(file);
       else reader.readAsDataURL(file);
       reader.onload = () => {
         fileLabel.textContent = file.name;
