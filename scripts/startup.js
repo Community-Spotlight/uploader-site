@@ -168,21 +168,32 @@ function showMediaEditor(namespace, fileType) {
     <div class="media-holder">
       ${ fileType === "mp4" ?
         `<video class="video-media" src="${media.d}" controls></video>` :
-        fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` : `<canvas class="image-media"></canvas>`
+        fileType === "html" ? `<iframe class="video-media" src="${media.d)}"></iframe>` :
+        fileType === "svg" ? `<div class="image-media">${compressSVG(media.d)}</div>` :
+        `<canvas class="image-media"></canvas>`
       }
     </div>
-    ${ fileType === "mp4" ? "" : `
+    ${ fileType === "mp4"? "" : `
       <div class="title">Aspect Ratio</div>
       <div class="selector-ui">
         <select>
-          <option value="" selected disabled hidden>Choose Scale</option>
-          <option value="[250,250]">250x250</option>
-          <option value="[300,250]">300x250</option>
-          <option value="[480,270]">480x270</option>
-          <option value="[300,50]">300x50</option>
-          <option value="[50,300]">50x300</option>
-          <option value="[360,120]">360x120</option>
-          <option value="[120,360]">120x360</option>
+          ${ fileType === "html"? `
+            <option value="" selected disabled hidden>Choose Scale</option>
+            <option value="[1,1]">1:1</option>
+            <option value="[4,3]">4:3</option>
+            <option value="[4,5]">4:5</option>
+            <option value="[16,9]">16:9</option>
+            <option value="[9,16]">9:16/option>
+          ` : `
+            <option value="" selected disabled hidden>Choose Scale</option>
+            <option value="[250,250]">250x250</option>
+            <option value="[300,250]">300x250</option>
+            <option value="[480,270]">480x270</option>
+            <option value="[300,50]">300x50</option>
+            <option value="[50,300]">50x300</option>
+            <option value="[360,120]">360x120</option>
+            <option value="[120,360]">120x360</option>`
+          }
         </select>
       </div>
     `
@@ -290,6 +301,21 @@ function showMediaEditor(namespace, fileType) {
         testRequirements();
         e.stopPropagation();
       });
+    } else if (fileType === "html") {
+      const iframe = editor.querySelector(`div[class="media-holder"] iframe`);
+
+      editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
+        const children = allCheckers[0].children;
+        children[0].style.display = "none";
+        children[1].style.display = "";
+        const value = JSON.parse(e.target.value);
+        const baseW = 800;
+        iframe.setAttribute("width", baseW);
+        iframe.setAttribute("height", Math.round((baseW / value[0]) * value[1]));
+
+        testRequirements();
+        e.stopPropagation();
+      });
     } else {
       const canvas = editor.querySelector(`div[class="media-holder"] canvas`);
       const ctx = canvas.getContext("2d");
@@ -328,13 +354,13 @@ function toFixedType(fileType) {
     case "image/jpg":
     case "image/jpeg": return "jpeg";
     case "video/mp4": return "mp4";
-    // TODO add HTML when implemented
+    case "text/html": return "html";
     default: return undefined;
   }
 }
 
 function generateID() {
-  const soup = "!?@#%*+-~_=,.:;[]{}()^/|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const soup = "!?@#*+-~_=:;[]{}()^|ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const id = [];
   for (let i = 0; i < 15; i++) { id[i] = soup.charAt(Math.random() * soup.length) }
   return id.join("");
@@ -386,7 +412,7 @@ function mediaBarSetup(bar) {
     e.stopPropagation();
   });
   mediaBtns[3].addEventListener("click", (e) => {
-    if (openMediaBtns > 2) return alert("You can only Upload 3 Promotions at a Time")
+    if (openMediaBtns > 2) return alert("You can only Upload 3 Promotions at a Time");
     const newBar = document.querySelector(`div[class="media-ctrl"]`).cloneNode(true);
     mediaBarSetup(newBar);
     openMediaBtns++;
