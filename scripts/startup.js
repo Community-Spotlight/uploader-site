@@ -177,7 +177,7 @@ function showMediaEditor(namespace, fileType) {
       <div class="title">Aspect Ratio</div>
       <div class="selector-ui">
         <select>
-          ${ fileType === "html"? `
+          ${ fileType === "html" ? `
             <option value="" selected disabled hidden>Choose Scale</option>
             <option value="[150,150]">1:1</option>
             <option value="[240,180]">4:3</option>
@@ -303,6 +303,7 @@ function showMediaEditor(namespace, fileType) {
       });
     } else if (fileType === "html") {
       const iframe = editor.querySelector(`div[class="media-holder"] iframe`);
+      media.d = media.d.split(",")[1];
 
       editor.querySelector(`div[class="selector-ui"] select`).addEventListener("change", (e) => {
         const children = allCheckers[0].children;
