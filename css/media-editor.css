@@ -53,13 +53,15 @@
   justify-content: center;
   justify-items: center;
 }
+.html-media {
+  border-radius: 5px;
+  border: solid 2px grey;
+  max-width: 600px;
+  max-height: 300px;
+}
 .video-media {
   max-width: 500px;
   max-height: 300px;
-}
-.video-media iframe {
-  border-radius: 5px;
-  border: solid 2px grey;
 }
 .image-media {
   max-width: 500px;
