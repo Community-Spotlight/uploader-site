@@ -375,9 +375,9 @@ function generateDate() {
 }
 
 function encodeTxt(txt) {
-    let encoded = [];
-    for (let i = 0; i < txt.length; i++) encoded.push(txt.charCodeAt(i));
-    return btoa(encoded.join(","));
+  let encoded = [];
+  for (let i = 0; i < txt.length; i++) encoded.push(txt.charCodeAt(i));
+  return btoa(encoded.join(","));
 }
 
 async function constructPost() {
@@ -390,6 +390,7 @@ async function constructPost() {
 
   // send media to file servers
   let fixedMedia = await uploadFiles(uploadData.media, id);
+  if (fixedMedia.length === 0) return ""; // shouldnt happen
   fixedMedia = JSON.stringify(fixedMedia);
 
   let url = "https://script.google.com/macros/s/AKfycbwb49wDXQjOBxtGfjg-bpyMXckewOntlqIyqZejA8MkEUu7I7juDctKLbMXrf6IBjUc-w/exec?gid=0";
@@ -413,7 +414,7 @@ function mediaBarSetup(bar) {
     e.stopPropagation();
   });
   mediaBtns[3].addEventListener("click", (e) => {
-    if (openMediaBtns > 2) return alert("You can only Upload 3 Promotions at a Time");
+    if (openMediaBtns > 4) return alert("You can only Upload 5 Promotions at a Time");
     const newBar = document.querySelector(`div[class="media-ctrl"]`).cloneNode(true);
     mediaBarSetup(newBar);
     openMediaBtns++;
@@ -478,7 +479,8 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     console.log("Submitting Promotion...");
     const loadScreen = showLoadingGUI();
     const urlData = await constructPost();
-    fetch(urlData)
+    if (!urlData) alert("Submission Error! Server Failed to Upload Media, please reload and try again. Sorry!");
+    else fetch(urlData)
       .then((r) => {
         alert("Promotion Submitted!");
         loadScreen.remove();
