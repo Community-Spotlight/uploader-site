@@ -1,8 +1,8 @@
 /*
-  Special Thanks to MubiLop with YeetYourFiles.lol for powering
+  Special Thanks to MubiLop with YeetYourFiles.com for powering
   the Community Spotlight File Uploader!
 
-  https://yeetyourfiles.lol/
+  https://yyf.mubilop.com
 */
 
 async function uploadFiles(mediaObj, id) {
