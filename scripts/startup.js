@@ -388,7 +388,6 @@ function encodeTxt(txt) {
 
 function generateSelectItem(item) {
   const itemCheck = item.substring(7, item.length - 1);
-  console.log(itemCheck, item, optionsForDisabling);
   if (optionsForDisabling.has(itemCheck)) item += " disabled";
   return item;
 }
