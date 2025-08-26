@@ -2,6 +2,7 @@
 let uploadData = { name: "", url: "", tags: [], media: {}, optID: "" };
 
 let showAllTags = false, hasSubmitted = false, openMediaBtns = 1;
+let optionsForDisabling = new Set();
 
 /* Setup */
 function setupBtnFncs() {
@@ -179,20 +180,20 @@ function showMediaEditor(namespace, fileType) {
         <select>
           ${ fileType === "html" ? `
             <option value="" selected disabled hidden>Choose Scale</option>
-            <option value="[150,150]">1:1</option>
-            <option value="[240,180]">4:3</option>
-            <option value="[240,300]">4:5</option>
-            <option value="[360,202.5]">16:9</option>
-            <option value="[202.5,360]">9:16</option>
+            <option ${generateSelectItem(`value="[150,150]"`)}>1:1</option>
+            <option ${generateSelectItem(`value="[240,180]"`)}>4:3</option>
+            <option ${generateSelectItem(`value="[240,300]"`)}>4:5</option>
+            <option ${generateSelectItem(`value="[360,202.5]"`)}>16:9</option>
+            <option ${generateSelectItem(`value="[202.5,360]"`)}>9:16</option>
           ` : `
             <option value="" selected disabled hidden>Choose Scale</option>
-            <option value="[250,250]">250x250</option>
-            <option value="[300,250]">300x250</option>
-            <option value="[480,270]">480x270</option>
-            <option value="[300,50]">300x50</option>
-            <option value="[50,300]">50x300</option>
-            <option value="[360,120]">360x120</option>
-            <option value="[120,360]">120x360</option>`
+            <option ${generateSelectItem(`value="[250,250]"`)}>250x250</option>
+            <option ${generateSelectItem(`value="[300,250]"`)}>300x250</option>
+            <option ${generateSelectItem(`value="[480,270]"`)}>480x270</option>
+            <option ${generateSelectItem(`value="[300,50]"`)}>300x50</option>
+            <option ${generateSelectItem(`value="[50,300]"`)}>50x300</option>
+            <option ${generateSelectItem(`value="[360,120]"`)}>360x120</option>
+            <option ${generateSelectItem(`value="[120,360]"`)}>120x360</option>`
           }
         </select>
       </div>
@@ -220,6 +221,7 @@ function showMediaEditor(namespace, fileType) {
     <button class="media-submit" style="background: linear-gradient(125deg, #ff3b3b, #bd0202); border: solid 3px #910000; -webkit-text-stroke: 1px #910000;">Cancel</button>
   `;
 
+  let aspectRatioText;
   const submitBtn = editor.querySelector(`button[class="media-submit"]`);
   const testRequirements = () => {
     if (
@@ -233,6 +235,7 @@ function showMediaEditor(namespace, fileType) {
   };
   submitBtn.addEventListener("click", (e) => {
     if (!canSubmit) delete uploadData.media[namespace];
+    optionsForDisabling.add(aspectRatioText);
     const anim = editor.animate(
       [{ transform: "translate(-50%, -50%) scale(1)" }, { transform: "translate(-50%, -50%) scale(0)" }], { duration: 250, easing: "ease-in" }
     );
@@ -293,7 +296,8 @@ function showMediaEditor(namespace, fileType) {
         const children = allCheckers[0].children;
         children[0].style.display = "none";
         children[1].style.display = "";
-        const value = JSON.parse(e.target.value);
+        aspectRatioText = e.target.value;
+        const value = JSON.parse(aspectRatioText);
         svg.setAttribute("width", value[0]);
         svg.setAttribute("height", value[1]);
 
@@ -309,7 +313,8 @@ function showMediaEditor(namespace, fileType) {
         const children = allCheckers[0].children;
         children[0].style.display = "none";
         children[1].style.display = "";
-        const value = JSON.parse(e.target.value);
+        aspectRatioText = e.target.value;
+        const value = JSON.parse(aspectRatioText);
         media.d = btoa(`<!-- CS META: ${value[0]},${value[1]} -->`) + ogHTML;
         iframe.style.width = value[0];
         iframe.style.height = value[1];
@@ -334,7 +339,8 @@ function showMediaEditor(namespace, fileType) {
         const children = allCheckers[0].children;
         children[0].style.display = "none";
         children[1].style.display = "";
-        const value = JSON.parse(e.target.value);
+        aspectRatioText = e.target.value;
+        const value = JSON.parse(aspectRatioText);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         canvas.width = value[0];
         canvas.height = value[1];
@@ -378,6 +384,11 @@ function encodeTxt(txt) {
   let encoded = [];
   for (let i = 0; i < txt.length; i++) encoded.push(txt.charCodeAt(i));
   return btoa(encoded.join(","));
+}
+
+function generateSelectItem(item) {
+  if (optionsForDisabling.has(item)) item += " disabled";
+  return item;
 }
 
 async function constructPost() {
@@ -483,6 +494,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     else fetch(urlData)
       .then((r) => {
         alert("Promotion Submitted!");
+        optionsForDisabling = new Set();
         loadScreen.remove();
       })
       .catch((e) => {
