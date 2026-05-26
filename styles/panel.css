@@ -1,0 +1,256 @@
+/* Generic Panel CSS */
+.panel-overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.panel {
+  display: grid;
+  max-width: 85%;
+  padding: 25px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  background-color: #1f1f1f;
+  border: solid grey 5px;
+  border-radius: 25px;
+  box-shadow: #00ff84 0px 0px 0px 4px;
+  display: block;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.panel .outer-holder {
+  display: grid;
+}
+.panel .data-holder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  color: #fff;
+  font-size: 15px;
+  width: auto;
+  margin: auto;
+  padding: 10px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  /* Tile Background */
+  background-image:
+    linear-gradient(
+      45deg,
+      #fff 25%,
+      transparent 25%,
+      transparent 75%,
+      #fff 75%
+    ),
+    linear-gradient(45deg, #fff 25%, #eaf0f8 25%, #eaf0f8 75%, #fff 75%);
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    10px 10px;
+}
+.panel .load-holder {
+  padding: 20px 30px 20px 30px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  margin: 10px 20px 10px 20px;
+  display: grid;
+  background-color: #171717;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
+.panel .status-holder {
+  padding: 10px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  margin: 10px 20px 10px 20px;
+  display: grid;
+  background-color: #171717;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden auto;
+}
+.panel .status-holder [class*="box"] {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+.panel [class*="holder"] {
+  max-height: 60vh;
+}
+
+.panel .media-zone {
+  display: flex;
+  margin-top: 10px;
+}
+
+.panel .header {
+  font-family: Tilt Warp;
+  font-size: 25px;
+  padding: 0 50px 0 50px;
+  white-space: nowrap;
+}
+.panel .title {
+  font-family: Tilt Warp;
+  font-size: large;
+  border-bottom: 2px dotted #fff;
+  width: max-content;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.panel .title img {
+  width: 30px;
+  margin-right: 10px;
+}
+.panel .desc {
+  font-family: Arial, Sans-Serif, Helvetica;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  margin: 5px 0px 15px 0px;
+  color: #7a7a7a;
+}
+.panel .list {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px 15%;
+  text-align: left;
+  border-radius: 15px;
+  margin: 0;
+  list-style-type: circle;
+}
+.panel .list li {
+  margin-bottom: 6px;
+}
+.panel .grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+.panel .grid li {
+  width: 33.33%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: solid 1.5px gray;
+  margin-right: -1.5px;
+  margin-bottom: -1.5px;
+}
+.panel .grid li:nth-child(1) {
+  border-top-left-radius: 8px;
+}
+.panel .grid li:nth-child(3) {
+  border-top-right-radius: 8px;
+}
+
+.panel .load-circle {
+  animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.panel .warn-box {
+  display: flex;
+  border: dotted 2px gold;
+  flex-direction: column;
+  border-radius: 12px;
+  padding: 10px 20px;
+  background: rgba(255, 150, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.panel .media-ctrl {
+  margin: 15px;
+  user-select: none;
+  cursor: pointer;
+  transition: transform 200ms ease-in-out;
+  transform: scale(1);
+}
+.panel .media-ctrl:hover {
+  transform: scale(1.2);
+}
+
+/* Media Editor CSS */
+.btn[awaitingchecks] {
+  background: linear-gradient(125deg, #ff3b3b, #bd0202);
+  border: solid 3px #910000;
+  -webkit-text-stroke: 1px #910000;
+}
+.btn[awaitingchecks]:hover {
+  box-shadow: 0 0 10px #f72157;
+}
+
+.panel .data-holder .media {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.editor-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10px;
+  align-items: center;
+  width: 100%;
+}
+.editor-section .title {
+  border-bottom: none;
+  margin: 0;
+}
+
+.editor-section .selector-ui {
+  width: 100%;
+}
+.editor-section .selector-ui select {
+  width: 90%;
+  margin: 10px 0 10px 0;
+  padding: 5px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  background-color: #171717;
+  color: #fff;
+  text-align: center;
+  text-align-last: center;
+  font-size: large;
+}
+
+.editor-section .box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  margin: 10px 0 0;
+  padding: 10px;
+  border: solid grey 1.5px;
+  border-radius: 10px;
+  background-color: #171717;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.editor-section .box img {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}

@@ -1,0 +1,294 @@
+/* Imports */
+import {
+  FILE_TYPES,
+  IMG_RATIOS,
+  VIDEO_HTML_RATIOS,
+  VIDEO_LENGTHS,
+} from "../static/file-types.js";
+import { ASSET_PATH, PANELS, openPanel, genSelectMenu } from "./gui-utils.js";
+import { _ioWrap, compressSVG, getAspectRatio } from "./utils.js";
+
+Events.on("OPEN_GUIDELINES", () => {
+  const GUIDELINES = [
+    // Important note header
+    `<div class="warn-box">
+      <div class="title">Important</div>
+      <i>Accepted Promotions will be active for 2 Weeks after being approved by a Team Member</i>
+    </div>`,
+    // General rules
+    `<div class="box">
+      <div class="title">General Rules</div>
+      <ul class="list">
+        <li>Promotional media <i>must</i> be 10MB or under</li>
+        <li>Promotions <i>must</i> be Appropriate</li>
+        <li>NSFW/Racism/Homophobia/Spam is <b>not</b> allowed</li>
+        <li>Scams and joke promotions are <b>not</b> allowed</li>
+        <li>Copyrighted Content is <b>not</b> allowed unless permission is granted by the Copyright Owner</li>
+      </ul>
+    </div>`,
+    // Image rules
+    `<div class="box">
+      <div class="title">
+        <img src="${ASSET_PATH}image-icon.svg" alt="Image"/>
+        <span>Image Rules</span>
+      </div>
+      <div class="list">
+        <div>Accepted file formats:</div>
+        <ul>
+          <li>PNG</li>
+          <li>JPG/JPEG</li>
+          <li>SVG (Vector Graphic)</li>
+        </ul>
+        <div>Accepted aspect ratios <i>(in pixels)</i>:</div>
+        <ul class="grid">
+          ${Object.keys(IMG_RATIOS)
+            .map((r) => "<li>" + r + "</li>")
+            .join("")}
+        </ul>
+      </div>
+    </div>`,
+    // Video rules
+    `<div class="box">
+      <div class="title">
+        <img src="${ASSET_PATH}video-icon.svg" alt="Video"/>
+        <span>Video Rules</span>
+      </div>
+      <div class="list">
+        <ul>
+          <li>Must have a length of <b>5, 10, 15, or 30</b> seconds</li>
+          <li>No extreme volume spikes, sudden loud noises, or intentional audio clipping</li>
+          <li>Videos containing intense flashing lights or effects must include a clear epilepsy warning</li>
+        </ul>
+        <div>Accepted file formats:</div>
+        <ul>
+          <li>MP4</li>
+        </ul>
+        <div>Accepted aspect ratios:</div>
+        <ul class="grid">
+          ${Object.keys(VIDEO_HTML_RATIOS)
+            .map((r) => "<li>" + r + "</li>")
+            .join("")}
+        </ul>
+      </div>
+    </div>`,
+    // HTML rules
+    `<div class="box">
+      <div class="title">
+        <img src="${ASSET_PATH}playable-icon.svg" alt="HTML"/>
+        <span>HTML Rules</span>
+      </div>
+      <div class="list">
+        <ul>
+          <li>Popups, Downloads, or code that modifies the outer DOM is <b>not</b> allowed</li>
+          <li>Tracking/use of Local Storage is <b>not</b> allowed</li>
+          <li>All Audio/Video <b>must</b> be User-Initiated or muted by default</li>
+          <li>Malware or any form of it is <b>not</b> allowed</li>
+        </ul>
+        <div>Accepted aspect ratios:</div>
+        <ul class="grid">
+          ${Object.keys(VIDEO_HTML_RATIOS)
+            .map((r) => "<li>" + r + "</li>")
+            .join("")}
+        </ul>
+      </div>
+    </div>`,
+  ];
+
+  openPanel(PANELS.alert, {
+    title: "Promotion Media Guidelines",
+    desc: GUIDELINES.join("<br>"),
+  });
+});
+
+function initMediaEditor(editor, id, uploadedMedia) {
+  const guiData = __guiData;
+  const media = uploadedMedia[id];
+  const type = media.t;
+
+  let mediaPassedChecks = [];
+  let selectedAspectRatio = null;
+  let settingsCallback = null;
+
+  // prettier-ignore
+  const requirements = Array.from(editor._requirementDiv.querySelectorAll(".box"));
+  mediaPassedChecks = Array(requirements.length).fill(true);
+
+  const passCheck = (index) => {
+    const requirement = requirements[index];
+    mediaPassedChecks[index] = true;
+    const icons = requirement.children;
+    icons[0].style.display = "none";
+    icons[1].style.display = "";
+  };
+
+  const testRequirements = () => {
+    if (mediaPassedChecks.every((c) => c)) {
+      editor._submitBtn.removeAttribute("awaitingchecks");
+      editor._submitBtn.textContent = "Submit";
+    }
+  };
+
+  /* Content Viewer */
+  switch (type) {
+    case FILE_TYPES.VIDEO.t: {
+      const video = editor._mediaContent.querySelector("video");
+      video.addEventListener("loadedmetadata", () => {
+        // Hard check if the video aspect ratio is valid,
+        // we cant manually set the video aspect ratio... so make the users do it
+        const ratio = getAspectRatio(video.videoWidth, video.videoHeight);
+        if (VIDEO_HTML_RATIOS[ratio]) {
+          passCheck(0);
+          media.d = media.d.split(",")[1];
+        }
+
+        // Check if the video length is valid
+        const length = Math.floor(video.duration);
+        if (VIDEO_LENGTHS.includes(length)) passCheck(1);
+
+        testRequirements();
+      });
+      break;
+    }
+    case FILE_TYPES.HTML.t: {
+      const iframe = editor._mediaContent.querySelector("iframe");
+      const ogHTML = media.d.split(",")[1];
+
+      settingsCallback = (ratio) => {
+        // Append some metadata for html
+        media.d = btoa(`<!-- CS META: ${ratio[0]},${ratio[1]} -->`) + ogHTML;
+        iframe.style.width = ratio[0];
+        iframe.style.height = ratio[1];
+      };
+      break;
+    }
+    case FILE_TYPES.SVG.t: {
+      const svg = editor._mediaContent.querySelector("svg");
+      svg.setAttribute("preserveAspectRatio", "none");
+
+      settingsCallback = (ratio) => {
+        svg.setAttribute("width", ratio[0]);
+        svg.setAttribute("height", ratio[1]);
+        media.d = btoa(svg.outerHTML);
+      };
+      break;
+    }
+    default: {
+      /* Image Case */
+      const canvas = editor._mediaContent.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onerror = (e) => console.warn(e);
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = media.d;
+
+      settingsCallback = (ratio) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = ratio[0];
+        canvas.height = ratio[1];
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        media.d = canvas.toDataURL().split(",")[1];
+      };
+    }
+  }
+
+  if (editor._settingsDiv && settingsCallback) {
+    /* Settings UI */
+    const selector = editor._settingsDiv.querySelector("select");
+    _ioWrap.call(selector, "change", (e) => {
+      selectedAspectRatio = e.target.value;
+
+      const ratioList =
+        type === FILE_TYPES.HTML.t ? VIDEO_HTML_RATIOS : IMG_RATIOS;
+
+      if (ratioList[selectedAspectRatio]) {
+        passCheck(0);
+        settingsCallback(ratioList[selectedAspectRatio]);
+        testRequirements();
+      }
+    });
+  }
+
+  /* Submit Button */
+  _ioWrap.call(editor._submitBtn, "click", (_, btn) => {
+    if (btn.hasAttribute("awaitingchecks")) delete uploadedMedia[id];
+    else if (selectedAspectRatio) {
+      guiData.selectedMediaRatios.add(selectedAspectRatio);
+    }
+
+    editor.close();
+  });
+}
+
+Events.on("OPEN_MEDIA_VIEWER", (id, uploadedMedia) => {
+  const media = uploadedMedia[id];
+  const type = media.t;
+  const editor = openPanel(PANELS.media);
+
+  // Setup UI
+  let contentViewer;
+  let aspectRatioSelector;
+  let requiredChecks;
+  switch (type) {
+    case FILE_TYPES.VIDEO.t:
+      contentViewer = `<video class="media" src="${media.d}" controls></video>`;
+      aspectRatioSelector = ""; // we dont have a way to scale videos
+      break;
+    case FILE_TYPES.HTML.t:
+      contentViewer = `<iframe class="media" src="${media.d}"></iframe>`;
+      aspectRatioSelector = genSelectMenu(
+        "Aspect Ratio",
+        VIDEO_HTML_RATIOS,
+        __guiData.selectedMediaRatios,
+      );
+      break;
+    case FILE_TYPES.SVG.t:
+      contentViewer = `<div class="media">${compressSVG(media.d)}</div>`;
+      aspectRatioSelector = genSelectMenu(
+        "Aspect Ratio",
+        IMG_RATIOS,
+        __guiData.selectedMediaRatios,
+      );
+      break;
+    default:
+      /* Image case */
+      contentViewer = `<canvas class="media"></canvas>`;
+      aspectRatioSelector = genSelectMenu(
+        "Aspect Ratio",
+        IMG_RATIOS,
+        __guiData.selectedMediaRatios,
+      );
+  }
+
+  // Setup Requirements
+  requiredChecks = `<div class="title">Required Checks</div>`;
+  if (type === FILE_TYPES.VIDEO.t) {
+    requiredChecks += `
+      <div class="box">
+        <img src="${ASSET_PATH}bad.svg" draggable="false">
+        <img src="${ASSET_PATH}good.svg" draggable="false" style="display: none">
+        <span class="check-desc">Aspect Ratio Allowed</span>
+      </div>
+      <div class="box">
+        <img src="${ASSET_PATH}bad.svg" draggable="false">
+        <img src="${ASSET_PATH}good.svg" draggable="false" style="display: none">
+        <span class="check-desc">Video Length in Range</span>
+      </div>`;
+  } else {
+    requiredChecks += `
+      <div class="box">
+        <img src="${ASSET_PATH}bad.svg" draggable="false">
+        <img src="${ASSET_PATH}good.svg" draggable="false" style="display: none">
+        <span class="check-desc">Aspect Ratio Selected</span>
+      </div>`;
+  }
+
+  editor._mediaContent.innerHTML = contentViewer;
+  editor._settingsDiv.innerHTML = aspectRatioSelector;
+  editor._requirementDiv.innerHTML = requiredChecks;
+  initMediaEditor(editor, id, uploadedMedia);
+});
