@@ -239,7 +239,7 @@ input[type="file"] {
 
 /* Donate Button */
 #donate-btn {
-  font-size: x-large;
+  font-size: medium;
   text-decoration: none;
   -moz-text-decoration-line: none;
   text-decoration-line: none;
