@@ -268,12 +268,18 @@ function initSubmitBtn() {
       .then(success)
       .catch((e) => {
         /**
-         * Note:
-         * This is not a fool-proof error check. Its the only one we're able
-         * to use to see if the promotion uploaded to the form or not.
+         * Important Note:
+         * This is not a fool-proof error check. Unfortunately this is the
+         * only way to check to see if the Promotion uploaded to the form
+         * at this time. (CORS issue "Access-Control-Allow-Origin")
          */
-        if (e.message === "Failed to fetch") success();
-        else failure("Server Error: " + e);
+        const probableSuccessMsgs = [
+          "failed to fetch", // chrome
+          "load failed", // safari
+          "networkerror when attempting to fetch resource." // firefox
+        ];
+        if (probableSuccessMsgs.includes(e.message.toLowerCase())) success();
+        else failure("Upload Error: " + e);
       });
   });
 }
