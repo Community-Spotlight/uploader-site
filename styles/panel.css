@@ -131,7 +131,6 @@
   text-align: left;
   border-radius: 15px;
   margin: 0;
-  list-style-type: circle;
 }
 .panel .list li {
   margin-bottom: 6px;
@@ -157,6 +156,10 @@
 }
 .panel .grid li:nth-child(3) {
   border-top-right-radius: 8px;
+}
+
+.panel .circle-bullet {
+  list-style-type: circle;
 }
 
 .panel .load-circle {
