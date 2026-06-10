@@ -1,61 +1,162 @@
 /**
- * Emit and handle custom events.
+ * Dispatch and handle custom events.
  *
  * @author Vicente G. (@SharkPool-SP)
  *
  * @version 2026.1.0.0
  */
 class Events {
-  static eventCache = new Map();
+  static _events = new Map();
 
   /**
-   * Emits a custom event and run their listeners
+   * Gets the data of an event.
    *
+   * @private
    * @param {String} eventName name identifier of the event
-   * @param {*} optData optional event data recieved by listeners
+   * @returns Event data if exists, otherwise undefined
    */
-  static emit(eventName, ...optData) {
-    const listeners = this.eventCache.get(String(eventName));
-    if (listeners) {
-      listeners.forEach((func) => func(...optData));
+  static _getEvent(eventName) {
+    const name = String(eventName);
+
+    return Events._events.get(name);
+  }
+
+  /**
+   * Creates a new event data object.
+   *
+   * @private
+   * @param {String} eventName name identifier of the event
+   * @returns New event data object
+   */
+  static _newEvent(eventName) {
+    const name = String(eventName);
+
+    // Early exist if event already exists
+    if (Events._events.has(name)) return Events._getEvent(name);
+
+    const eventData = {
+      max: null, // null represents Infinity
+      listeners: [],
+    };
+
+    this._events.set(name, eventData);
+
+    return eventData;
+  }
+
+  /**
+   * Checks if a new listener can be added to an event.
+   *
+   * @private
+   * @param {String} eventName name identifier of the event
+   * @param {Object} eventData Event data object
+   * @returns true if a new listener can be added
+   */
+  static _canListen(eventName, eventData) {
+    if (eventData.max !== null && eventData.listeners.length >= eventData.max) {
+      console.warn(
+        `Events.js: MAX LISTENERS REACHED (${Events.getMaxListeners(eventData.name)}) '${eventName}'`,
+      );
+
+      return false;
     }
+
+    return true;
+  }
+
+  /**
+   * Validates a function.
+   *
+   * @private
+   * @param {Function} func Function to validate
+   */
+  static _validateFunction(func) {
+    if (typeof func !== "function") {
+      throw new Error("Events.js: Parameter must be a function!");
+    }
+  }
+
+  /**
+   * Dispatches an event to it's listeners.
+   *
+   * @param {String} eventName the name of the event to dispatch
+   * @param {...*} optData additional arguments passed to each listener
+   */
+  static emit(eventName, ...args) {
+    const eventData = Events._getEvent(eventName);
+    if (!eventData) return;
+
+    const listeners = eventData.listeners;
+    for (let i = 0; i < listeners.length; i++) listeners[i](...args);
+  }
+
+  /**
+   * Dispatches a request event to it's listeners and returns
+   * an array containing each listener's return value.
+   *
+   * @param {string} eventName the name of the event to dispatch
+   * @param {...*} optData additional arguments passed to each listener
+   * @returns {Array<*>} An array of values returned by the event listeners
+   *
+   * @see {@link Events.requestAsync} for the asynchronous version.
+   */
+  static request(eventName, ...args) {
+    const eventData = Events._getEvent(eventName);
+    if (!eventData) return undefined;
+
+    const listeners = eventData.listeners;
+    const results = new Array(listeners.length);
+    for (let i = 0; i < listeners.length; i++) {
+      results[i] = listeners[i](...args);
+    }
+
+    return results;
+  }
+
+  /**
+   * Same as {@link Events.request}, but runs each listener asynchronously
+   * and waits for all results to resolve.
+   *
+   * @see {@link Events.request} for the synchronous version.
+   */
+  static async requestAsync(eventName, ...args) {
+    const eventData = Events._getEvent(eventName);
+    if (!eventData) return undefined;
+
+    const listeners = eventData.listeners;
+    const promises = new Array(listeners.length);
+    for (let i = 0; i < listeners.length; i++) {
+      promises[i] = listeners[i](...args);
+    }
+
+    return Promise.all(promises);
   }
 
   /**
    * Append a listener to a custom event.
    *
    * @param {String} eventName name identifier of the event
-   * @param {Function} func function that runs when emitted
+   * @param {Function} func event dispatch callback
    */
   static on(eventName, func) {
-    if (typeof func !== "function") {
-      throw new Error("Events.on -- Parameter 2 must be a function!");
-    }
+    Events._validateFunction(func);
 
-    const name = String(eventName);
-    if (this.eventCache.has(name)) {
-      this.eventCache.get(name).push(func);
-    } else {
-      this.eventCache.set(name, [func]);
-    }
+    const eventData = Events._newEvent(eventName);
+    if (Events._canListen(eventName, eventData)) eventData.listeners.push(func);
   }
 
   /**
    * Append a listener to a custom event. Will run before all other listeners.
    *
    * @param {String} eventName name identifier of the event
-   * @param {Function} func function that runs when emitted
+   * @param {Function} func event dispatch callback
    */
   static before(eventName, func) {
-    if (typeof func !== "function") {
-      throw new Error("Events.before -- Parameter 2 must be a function!");
-    }
+    Events._validateFunction(func);
 
-    const name = String(eventName);
-    if (this.eventCache.has(name)) {
-      this.eventCache.get(name).unshift(func);
-    } else {
-      this.eventCache.set(name, [func]);
+    const eventData = Events._newEvent(eventName);
+    if (Events._canListen(eventName, eventData)) {
+      eventData.listeners.unshift(func);
     }
   }
 
@@ -63,21 +164,17 @@ class Events {
    * Appends a listener to a custom event. Runs once.
    *
    * @param {String} eventName name identifier of the event
-   * @param {Function} func function that runs when emitted
+   * @param {Function} func event dispatch callback
    */
   static once(eventName, func) {
-    if (typeof func !== "function") {
-      throw new Error("Events.once -- Parameter 2 must be a function!");
-    }
+    Events._validateFunction(func);
 
-    const name = String(eventName);
-    const wrapper = (data) => {
-      // Remove this listener after it fires
-      this.off(name, wrapper);
-      func(data);
+    const wrapper = function (...data) {
+      Events.off(eventName, wrapper);
+      return func(...data);
     };
 
-    this.on(name, wrapper);
+    Events.on(eventName, wrapper);
   }
 
   /**
@@ -88,16 +185,14 @@ class Events {
    * @param {Function} optFunc specific function to remove
    */
   static off(eventName, optFunc) {
-    const name = String(eventName);
-    const funcs = this.eventCache.get(name);
-    if (!funcs) return;
+    const eventData = Events._getEvent(eventName);
+    if (!eventData) return;
 
     if (typeof optFunc === "function") {
-      const filtered = funcs.filter((f) => f !== optFunc);
-      this.eventCache.set(name, filtered);
+      eventData.listeners = eventData.listeners.filter((f) => f !== optFunc);
     } else {
       // No function provided, remove all listeners
-      this.eventCache.delete(name);
+      Events._events.delete(String(eventName));
     }
   }
 
@@ -105,8 +200,30 @@ class Events {
    * Removes all listeners and custom events.
    */
   static flush() {
-    this.eventCache.clear();
+    Events._events.clear();
+  }
+
+  /**
+   * Sets the max number of listeners an event can have.
+   *
+   * @param {String} eventName name identifier of the event
+   * @param {Number|null} amount The max amount of listeners an event can have
+   */
+  static setMaxListeners(eventName, amount) {
+    const eventData = Events._newEvent(eventName);
+    eventData.max = amount === null ? null : Number(amount);
+  }
+
+  /**
+   * Gets the max number of listeners an event can have.
+   *
+   * @param {String} eventName name identifier of the event
+   * @returns max listeners
+   */
+  static getMaxListeners(eventName) {
+    const eventData = Events._getEvent(eventName);
+    if (!eventData) return null;
+
+    return eventData.max === null ? Infinity : eventData.max;
   }
 }
-
-window.Events = Events;

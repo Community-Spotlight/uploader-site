@@ -129,6 +129,17 @@ function initMediaEditor(editor, id, uploadedMedia) {
     }
   };
 
+  const tryMediaConversion = (func) => {
+    try {
+      func();
+    } catch (e) {
+      openPanel(PANELS.alert, {
+        title: "Media Conversion Error",
+        desc: e.message,
+      });
+    }
+  };
+
   /* Content Viewer */
   switch (type) {
     case FILE_TYPES.VIDEO.t: {
@@ -152,13 +163,15 @@ function initMediaEditor(editor, id, uploadedMedia) {
     }
     case FILE_TYPES.HTML.t: {
       const iframe = editor._mediaContent.querySelector("iframe");
-      const ogHTML = media.d.split(",")[1];
+      const ogHTML = atob(media.d.split(",")[1]);
 
-      settingsCallback = (ratio) => {
-        // Append some metadata for html
-        media.d = btoa(`<!-- CS META: ${ratio[0]},${ratio[1]} -->`) + ogHTML;
-        iframe.style.width = ratio[0];
-        iframe.style.height = ratio[1];
+      settingsCallback = (ratio, rawRatio) => {
+        iframe.style.width = ratio[0] + "px";
+        iframe.style.height = ratio[1] + "px";
+        tryMediaConversion(() => {
+          // Append some metadata for html
+          media.d = btoa(`<!-- CS META: ${rawRatio} -->` + ogHTML);
+        });
       };
       break;
     }
@@ -169,7 +182,9 @@ function initMediaEditor(editor, id, uploadedMedia) {
       settingsCallback = (ratio) => {
         svg.setAttribute("width", ratio[0]);
         svg.setAttribute("height", ratio[1]);
-        media.d = btoa(svg.outerHTML);
+        tryMediaConversion(() => {
+          media.d = btoa(svg.outerHTML);
+        });
       };
       break;
     }
@@ -208,7 +223,7 @@ function initMediaEditor(editor, id, uploadedMedia) {
 
       if (ratioList[selectedAspectRatio]) {
         passCheck(0);
-        settingsCallback(ratioList[selectedAspectRatio]);
+        settingsCallback(ratioList[selectedAspectRatio], selectedAspectRatio);
         testRequirements();
       }
     });

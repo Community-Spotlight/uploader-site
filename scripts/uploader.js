@@ -276,7 +276,7 @@ function initSubmitBtn() {
         const probableSuccessMsgs = [
           "failed to fetch", // chrome
           "load failed", // safari
-          "networkerror when attempting to fetch resource." // firefox
+          "networkerror when attempting to fetch resource.", // firefox
         ];
         if (probableSuccessMsgs.includes(e.message.toLowerCase())) success();
         else failure("Upload Error: " + e);
