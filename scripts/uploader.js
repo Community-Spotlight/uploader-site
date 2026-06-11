@@ -199,7 +199,6 @@ function initMediaField() {
   };
 
   newUpload();
-  guiData.nextMediaID--;
 }
 
 function initSubmitBtn() {
